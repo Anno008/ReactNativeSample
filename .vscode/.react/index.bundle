@@ -1371,7 +1371,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   _reactNative.AppRegistry.registerComponent(_app.name, function () {
     return _App.default;
   });
-},0,[1,2,540,671],"index.js");
+},0,[1,2,540,672],"index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -85779,7 +85779,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         return _react.default.createElement(_TabNavigator.default, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 7
+            lineNumber: 6
           }
         });
       }
@@ -85819,26 +85819,28 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   module.exports = _interopRequireWildcard;
 },541,[],"node_modules\\@babel\\runtime\\helpers\\interopRequireWildcard.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
   exports.default = void 0;
 
-  var _reactNavigation = _$$_REQUIRE(_dependencyMap[0], "react-navigation");
-
-  var _HomeScreen = _$$_REQUIRE(_dependencyMap[1], "./screens/HomeScreen/HomeScreen");
+  var _reactNavigation = _$$_REQUIRE(_dependencyMap[1], "react-navigation");
 
   var _AboutScreen = _$$_REQUIRE(_dependencyMap[2], "./screens/AboutScreen/AboutScreen");
 
+  var _HomeScreen = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./screens/HomeScreen"));
+
   var TabNavigator = (0, _reactNavigation.createBottomTabNavigator)({
-    Home: _HomeScreen.HomeScreen,
+    Home: _HomeScreen.default,
     About: _AboutScreen.AboutScreen
   });
 
   var _default = (0, _reactNavigation.createNavigationContainer)(TabNavigator);
 
   exports.default = _default;
-},542,[543,668,670],"src\\TabNavigator.tsx");
+},542,[1,543,668,669],"src\\TabNavigator.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = {
     get createAppContainer() {
@@ -105114,6 +105116,47 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireWildcard");
 
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.AboutScreen = void 0;
+
+  var React = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[1], "react"));
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
+
+  var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\screens\\AboutScreen\\AboutScreen.tsx";
+
+  var AboutScreen = function AboutScreen() {
+    return React.createElement(_reactNative.View, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 5
+      }
+    }, React.createElement(_reactNative.Text, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 6
+      }
+    }, "About screen"));
+  };
+
+  exports.AboutScreen = AboutScreen;
+},668,[541,46,2],"src\\screens\\AboutScreen\\AboutScreen.tsx");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _HomeScreen = _$$_REQUIRE(_dependencyMap[0], "./HomeScreen");
+
+  var _default = _HomeScreen.HomeScreen;
+  exports.default = _default;
+},669,[670],"src\\screens\\HomeScreen\\index.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireWildcard");
+
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/interopRequireDefault");
 
   Object.defineProperty(exports, "__esModule", {
@@ -105157,7 +105200,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.HomeScreen = HomeScreen;
-},668,[541,1,46,2,669],"src\\screens\\HomeScreen\\HomeScreen.tsx");
+},670,[541,1,46,2,671],"src\\screens\\HomeScreen\\HomeScreen.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -105186,43 +105229,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   });
 
   exports.default = _default;
-},669,[2],"src\\screens\\HomeScreen\\HomeScreenStyles.ts");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireWildcard");
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.AboutScreen = void 0;
-
-  var _reactNative = _$$_REQUIRE(_dependencyMap[1], "react-native");
-
-  var React = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[2], "react"));
-
-  var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\screens\\AboutScreen\\AboutScreen.tsx";
-
-  var AboutScreen = function AboutScreen() {
-    return React.createElement(_reactNative.View, {
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 5
-      }
-    }, React.createElement(_reactNative.Text, {
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 6
-      }
-    }, "About screen"));
-  };
-
-  exports.AboutScreen = AboutScreen;
-},670,[541,2,46],"src\\screens\\AboutScreen\\AboutScreen.tsx");
+},671,[2],"src\\screens\\HomeScreen\\HomeScreenStyles.ts");
 __d(function(global, require, _aUnused, _bUnused, module, exports, _cUnused) {
   module.exports = {
   "name": "TodoApp",
   "displayName": "TodoApp"
 };
-},671,[],"app.json");
+},672,[],"app.json");
 __r(82);
 __r(0);
 //# sourceMappingURL=index.map
