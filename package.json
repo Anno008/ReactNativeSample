@@ -1,0 +1,80 @@
+{
+  "name": "TodoApp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest --updateSnapshot",
+    "coverage": "jest --verbose --coverage --updateSnapshot && start ./coverage/lcov-report/index.html",
+    "buildAndroid": "cd android && gradlew assembleRelease"
+  },
+  "dependencies": {
+    "react": "16.6.3",
+    "react-native": "0.57.8",
+    "react-navigation": "^3.0.8"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.1.15",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
+    "@types/jest": "23.3.10",
+    "@types/react": "16.7.17",
+    "@types/react-native": "0.57.18",
+    "@types/react-navigation": "^2.13.8",
+    "@types/react-test-renderer": "16.0.3",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "23.6.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "enzyme-to-json": "^3.3.5",
+    "jest": "23.6.0",
+    "jest-fetch-mock": "^2.1.0",
+    "metro-react-native-babel-preset": "0.48.5",
+    "open": "0.0.5",
+    "react-dom": "^16.6.3",
+    "react-test-renderer": "16.6.3",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.11.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "3.2.2"
+  },
+  "jest": {
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.jest.json"
+      }
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "transformIgnorePatterns": [
+      "/node_modules/(?!react-navigation)/"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "collectCoverageFrom": [
+      "!**/node_modules/**",
+      "!**/__snapshots__/**",
+      "!**/*.styles.ts",
+      "!**/index.ts",
+      "src/**"
+    ],
+    "modulePaths": [
+      "<rootDir>"
+    ],
+    "setupFiles": [
+      "./tests/setup.js"
+    ]
+  }
+}
