@@ -1371,7 +1371,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   _reactNative.AppRegistry.registerComponent(_app.name, function () {
     return _App.default;
   });
-},0,[1,2,540,672],"index.js");
+},0,[1,2,540,708],"index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -85743,7 +85743,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _index = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "./../node_modules/react-transform-hmr/lib/index.js"));
 
-  var _TabNavigator = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "./TabNavigator"));
+  var _reactRedux = _$$_REQUIRE(_dependencyMap[9], "react-redux");
+
+  var _store = _$$_REQUIRE(_dependencyMap[10], "./store");
+
+  var _TabNavigator = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[11], "./TabNavigator"));
 
   var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\App.tsx";
   var _components = {
@@ -85776,12 +85780,18 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     (0, _createClass2.default)(App, [{
       key: "render",
       value: function render() {
-        return _react.default.createElement(_TabNavigator.default, {
+        return _react.default.createElement(_reactRedux.Provider, {
+          store: _store.store,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 6
+            lineNumber: 9
           }
-        });
+        }, _react.default.createElement(_TabNavigator.default, {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 10
+          }
+        }));
       }
     }]);
     return App;
@@ -85789,7 +85799,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default2 = App;
   exports.default = _default2;
-},540,[1,541,19,20,27,30,33,46,184,542],"src\\App.tsx");
+},540,[1,541,19,20,27,30,33,46,184,542,566,571],"src\\App.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -85819,6 +85829,1918 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   module.exports = _interopRequireWildcard;
 },541,[],"node_modules\\@babel\\runtime\\helpers\\interopRequireWildcard.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+
+  var _Provider = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "./components/Provider"));
+
+  exports.Provider = _Provider.default;
+
+  var _connectAdvanced = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "./components/connectAdvanced"));
+
+  exports.connectAdvanced = _connectAdvanced.default;
+
+  var _Context = _$$_REQUIRE(_dependencyMap[3], "./components/Context");
+
+  exports.ReactReduxContext = _Context.ReactReduxContext;
+
+  var _connect = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "./connect/connect"));
+
+  exports.connect = _connect.default;
+},542,[1,543,546,545,552],"node_modules\\react-redux\\lib\\index.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireWildcard");
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.default = void 0;
+
+  var _inheritsLoose2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/inheritsLoose"));
+
+  var _react = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[3], "react"));
+
+  var _propTypes = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "prop-types"));
+
+  var _Context = _$$_REQUIRE(_dependencyMap[5], "./Context");
+
+  var Provider = function (_Component) {
+    (0, _inheritsLoose2.default)(Provider, _Component);
+
+    function Provider(props) {
+      var _this;
+
+      _this = _Component.call(this, props) || this;
+      var store = props.store;
+      _this.state = {
+        storeState: store.getState(),
+        store: store
+      };
+      return _this;
+    }
+
+    var _proto = Provider.prototype;
+
+    _proto.componentDidMount = function componentDidMount() {
+      this._isMounted = true;
+      this.subscribe();
+    };
+
+    _proto.componentWillUnmount = function componentWillUnmount() {
+      if (this.unsubscribe) this.unsubscribe();
+      this._isMounted = false;
+    };
+
+    _proto.componentDidUpdate = function componentDidUpdate(prevProps) {
+      if (this.props.store !== prevProps.store) {
+        if (this.unsubscribe) this.unsubscribe();
+        this.subscribe();
+      }
+    };
+
+    _proto.subscribe = function subscribe() {
+      var _this2 = this;
+
+      var store = this.props.store;
+      this.unsubscribe = store.subscribe(function () {
+        var newStoreState = store.getState();
+
+        if (!_this2._isMounted) {
+          return;
+        }
+
+        _this2.setState(function (providerState) {
+          if (providerState.storeState === newStoreState) {
+            return null;
+          }
+
+          return {
+            storeState: newStoreState
+          };
+        });
+      });
+      var postMountStoreState = store.getState();
+
+      if (postMountStoreState !== this.state.storeState) {
+        this.setState({
+          storeState: postMountStoreState
+        });
+      }
+    };
+
+    _proto.render = function render() {
+      var Context = this.props.context || _Context.ReactReduxContext;
+      return _react.default.createElement(Context.Provider, {
+        value: this.state
+      }, this.props.children);
+    };
+
+    return Provider;
+  }(_react.Component);
+
+  Provider.propTypes = {
+    store: _propTypes.default.shape({
+      subscribe: _propTypes.default.func.isRequired,
+      dispatch: _propTypes.default.func.isRequired,
+      getState: _propTypes.default.func.isRequired
+    }),
+    context: _propTypes.default.object,
+    children: _propTypes.default.any
+  };
+  var _default = Provider;
+  exports.default = _default;
+},543,[541,1,544,46,63,545],"node_modules\\react-redux\\lib\\components\\Provider.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  function _inheritsLoose(subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    subClass.__proto__ = superClass;
+  }
+
+  module.exports = _inheritsLoose;
+},544,[],"node_modules\\@babel\\runtime\\helpers\\inheritsLoose.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.default = exports.ReactReduxContext = void 0;
+
+  var _react = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "react"));
+
+  var ReactReduxContext = _react.default.createContext(null);
+
+  exports.ReactReduxContext = ReactReduxContext;
+  var _default = ReactReduxContext;
+  exports.default = _default;
+},545,[1,46],"node_modules\\react-redux\\lib\\components\\Context.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireWildcard");
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.default = connectAdvanced;
+
+  var _inheritsLoose2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/inheritsLoose"));
+
+  var _assertThisInitialized2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "@babel/runtime/helpers/assertThisInitialized"));
+
+  var _extends2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "@babel/runtime/helpers/extends"));
+
+  var _objectWithoutPropertiesLoose2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "@babel/runtime/helpers/objectWithoutPropertiesLoose"));
+
+  var _hoistNonReactStatics = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "hoist-non-react-statics"));
+
+  var _invariant = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "invariant"));
+
+  var _react = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[8], "react"));
+
+  var _reactIs = _$$_REQUIRE(_dependencyMap[9], "react-is");
+
+  var _Context = _$$_REQUIRE(_dependencyMap[10], "./Context");
+
+  function connectAdvanced(selectorFactory, _ref) {
+    if (_ref === void 0) {
+      _ref = {};
+    }
+
+    var _ref2 = _ref,
+        _ref2$getDisplayName = _ref2.getDisplayName,
+        getDisplayName = _ref2$getDisplayName === void 0 ? function (name) {
+      return "ConnectAdvanced(" + name + ")";
+    } : _ref2$getDisplayName,
+        _ref2$methodName = _ref2.methodName,
+        methodName = _ref2$methodName === void 0 ? 'connectAdvanced' : _ref2$methodName,
+        _ref2$renderCountProp = _ref2.renderCountProp,
+        renderCountProp = _ref2$renderCountProp === void 0 ? undefined : _ref2$renderCountProp,
+        _ref2$shouldHandleSta = _ref2.shouldHandleStateChanges,
+        shouldHandleStateChanges = _ref2$shouldHandleSta === void 0 ? true : _ref2$shouldHandleSta,
+        _ref2$storeKey = _ref2.storeKey,
+        storeKey = _ref2$storeKey === void 0 ? 'store' : _ref2$storeKey,
+        _ref2$withRef = _ref2.withRef,
+        withRef = _ref2$withRef === void 0 ? false : _ref2$withRef,
+        _ref2$forwardRef = _ref2.forwardRef,
+        forwardRef = _ref2$forwardRef === void 0 ? false : _ref2$forwardRef,
+        _ref2$context = _ref2.context,
+        context = _ref2$context === void 0 ? _Context.ReactReduxContext : _ref2$context,
+        connectOptions = (0, _objectWithoutPropertiesLoose2.default)(_ref2, ["getDisplayName", "methodName", "renderCountProp", "shouldHandleStateChanges", "storeKey", "withRef", "forwardRef", "context"]);
+    (0, _invariant.default)(renderCountProp === undefined, "renderCountProp is removed. render counting is built into the latest React dev tools profiling extension");
+    (0, _invariant.default)(!withRef, 'withRef is removed. To access the wrapped instance, use a ref on the connected component');
+    var customStoreWarningMessage = 'To use a custom Redux store for specific components,  create a custom React context with ' + "React.createContext(), and pass the context object to React-Redux's Provider and specific components" + ' like:  <Provider context={MyContext}><ConnectedComponent context={MyContext} /></Provider>. ' + 'You may also pass a {context : MyContext} option to connect';
+    (0, _invariant.default)(storeKey === 'store', 'storeKey has been removed and does not do anything. ' + customStoreWarningMessage);
+    var Context = context;
+    return function wrapWithConnect(WrappedComponent) {
+      if (process.env.NODE_ENV !== 'production') {
+        (0, _invariant.default)((0, _reactIs.isValidElementType)(WrappedComponent), "You must pass a component to the function returned by " + (methodName + ". Instead received " + JSON.stringify(WrappedComponent)));
+      }
+
+      var wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+      var displayName = getDisplayName(wrappedComponentName);
+      var selectorFactoryOptions = (0, _extends2.default)({}, connectOptions, {
+        getDisplayName: getDisplayName,
+        methodName: methodName,
+        renderCountProp: renderCountProp,
+        shouldHandleStateChanges: shouldHandleStateChanges,
+        storeKey: storeKey,
+        displayName: displayName,
+        wrappedComponentName: wrappedComponentName,
+        WrappedComponent: WrappedComponent
+      });
+      var pure = connectOptions.pure;
+      var OuterBaseComponent = _react.Component;
+      var FinalWrappedComponent = WrappedComponent;
+
+      if (pure) {
+        OuterBaseComponent = _react.PureComponent;
+      }
+
+      function makeDerivedPropsSelector() {
+        var lastProps;
+        var lastState;
+        var lastDerivedProps;
+        var lastStore;
+        var sourceSelector;
+        return function selectDerivedProps(state, props, store) {
+          if (pure && lastProps === props && lastState === state) {
+            return lastDerivedProps;
+          }
+
+          if (store !== lastStore) {
+            lastStore = store;
+            sourceSelector = selectorFactory(store.dispatch, selectorFactoryOptions);
+          }
+
+          lastProps = props;
+          lastState = state;
+          var nextProps = sourceSelector(state, props);
+
+          if (lastDerivedProps === nextProps) {
+            return lastDerivedProps;
+          }
+
+          lastDerivedProps = nextProps;
+          return lastDerivedProps;
+        };
+      }
+
+      function makeChildElementSelector() {
+        var lastChildProps, lastForwardRef, lastChildElement;
+        return function selectChildElement(childProps, forwardRef) {
+          if (childProps !== lastChildProps || forwardRef !== lastForwardRef) {
+            lastChildProps = childProps;
+            lastForwardRef = forwardRef;
+            lastChildElement = _react.default.createElement(FinalWrappedComponent, (0, _extends2.default)({}, childProps, {
+              ref: forwardRef
+            }));
+          }
+
+          return lastChildElement;
+        };
+      }
+
+      var Connect = function (_OuterBaseComponent) {
+        (0, _inheritsLoose2.default)(Connect, _OuterBaseComponent);
+
+        function Connect(props) {
+          var _this;
+
+          _this = _OuterBaseComponent.call(this, props) || this;
+          (0, _invariant.default)(forwardRef ? !props.wrapperProps[storeKey] : !props[storeKey], 'Passing redux store in props has been removed and does not do anything. ' + customStoreWarningMessage);
+          _this.selectDerivedProps = makeDerivedPropsSelector();
+          _this.selectChildElement = makeChildElementSelector();
+          _this.renderWrappedComponent = _this.renderWrappedComponent.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+          return _this;
+        }
+
+        var _proto = Connect.prototype;
+
+        _proto.renderWrappedComponent = function renderWrappedComponent(value) {
+          (0, _invariant.default)(value, "Could not find \"store\" in the context of " + ("\"" + displayName + "\". Either wrap the root component in a <Provider>, ") + "or pass a custom React context provider to <Provider> and the corresponding " + ("React context consumer to " + displayName + " in connect options."));
+          var storeState = value.storeState,
+              store = value.store;
+          var wrapperProps = this.props;
+          var forwardedRef;
+
+          if (forwardRef) {
+            wrapperProps = this.props.wrapperProps;
+            forwardedRef = this.props.forwardedRef;
+          }
+
+          var derivedProps = this.selectDerivedProps(storeState, wrapperProps, store);
+          return this.selectChildElement(derivedProps, forwardedRef);
+        };
+
+        _proto.render = function render() {
+          var ContextToUse = this.props.context || Context;
+          return _react.default.createElement(ContextToUse.Consumer, null, this.renderWrappedComponent);
+        };
+
+        return Connect;
+      }(OuterBaseComponent);
+
+      Connect.WrappedComponent = WrappedComponent;
+      Connect.displayName = displayName;
+
+      if (forwardRef) {
+        var forwarded = _react.default.forwardRef(function forwardConnectRef(props, ref) {
+          return _react.default.createElement(Connect, {
+            wrapperProps: props,
+            forwardedRef: ref
+          });
+        });
+
+        forwarded.displayName = displayName;
+        forwarded.WrappedComponent = WrappedComponent;
+        return (0, _hoistNonReactStatics.default)(forwarded, WrappedComponent);
+      }
+
+      return (0, _hoistNonReactStatics.default)(Connect, WrappedComponent);
+    };
+  }
+},546,[541,1,544,29,8,7,547,551,46,548,545],"node_modules\\react-redux\\lib\\components\\connectAdvanced.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  'use strict';
+
+  var ReactIs = _$$_REQUIRE(_dependencyMap[0], "react-is");
+
+  var REACT_STATICS = {
+    childContextTypes: true,
+    contextType: true,
+    contextTypes: true,
+    defaultProps: true,
+    displayName: true,
+    getDefaultProps: true,
+    getDerivedStateFromError: true,
+    getDerivedStateFromProps: true,
+    mixins: true,
+    propTypes: true,
+    type: true
+  };
+  var KNOWN_STATICS = {
+    name: true,
+    length: true,
+    prototype: true,
+    caller: true,
+    callee: true,
+    arguments: true,
+    arity: true
+  };
+  var FORWARD_REF_STATICS = {
+    '$$typeof': true,
+    render: true,
+    defaultProps: true,
+    displayName: true,
+    propTypes: true
+  };
+  var TYPE_STATICS = {};
+  TYPE_STATICS[ReactIs.ForwardRef] = FORWARD_REF_STATICS;
+  var defineProperty = Object.defineProperty;
+  var getOwnPropertyNames = Object.getOwnPropertyNames;
+  var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+  var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+  var getPrototypeOf = Object.getPrototypeOf;
+  var objectPrototype = Object.prototype;
+
+  function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+    if (typeof sourceComponent !== 'string') {
+      if (objectPrototype) {
+        var inheritedComponent = getPrototypeOf(sourceComponent);
+
+        if (inheritedComponent && inheritedComponent !== objectPrototype) {
+          hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+        }
+      }
+
+      var keys = getOwnPropertyNames(sourceComponent);
+
+      if (getOwnPropertySymbols) {
+        keys = keys.concat(getOwnPropertySymbols(sourceComponent));
+      }
+
+      var targetStatics = TYPE_STATICS[targetComponent['$$typeof']] || REACT_STATICS;
+      var sourceStatics = TYPE_STATICS[sourceComponent['$$typeof']] || REACT_STATICS;
+
+      for (var i = 0; i < keys.length; ++i) {
+        var key = keys[i];
+
+        if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
+          var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+
+          try {
+            defineProperty(targetComponent, key, descriptor);
+          } catch (e) {}
+        }
+      }
+
+      return targetComponent;
+    }
+
+    return targetComponent;
+  }
+
+  module.exports = hoistNonReactStatics;
+},547,[548],"node_modules\\hoist-non-react-statics\\dist\\hoist-non-react-statics.cjs.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  'use strict';
+
+  if (process.env.NODE_ENV === 'production') {
+    module.exports = _$$_REQUIRE(_dependencyMap[0], "./cjs/react-is.production.min.js");
+  } else {
+    module.exports = _$$_REQUIRE(_dependencyMap[1], "./cjs/react-is.development.js");
+  }
+},548,[549,550],"node_modules\\react-is\\index.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  /** @license React v16.6.1
+   * react-is.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: !0
+  });
+  var b = "function" === typeof Symbol && (typeof Symbol === "function" ? Symbol.for : "@@for"),
+      c = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.element") : 60103,
+      d = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.portal") : 60106,
+      e = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.fragment") : 60107,
+      f = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.strict_mode") : 60108,
+      g = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.profiler") : 60114,
+      h = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.provider") : 60109,
+      k = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.context") : 60110,
+      l = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.async_mode") : 60111,
+      m = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.concurrent_mode") : 60111,
+      n = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.forward_ref") : 60112,
+      p = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.suspense") : 60113,
+      r = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.memo") : 60115,
+      t = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.lazy") : 60116;
+
+  function u(a) {
+    if ("object" === typeof a && null !== a) {
+      var q = a.$$typeof;
+
+      switch (q) {
+        case c:
+          switch (a = a.type, a) {
+            case l:
+            case m:
+            case e:
+            case g:
+            case f:
+              return a;
+
+            default:
+              switch (a = a && a.$$typeof, a) {
+                case k:
+                case n:
+                case h:
+                  return a;
+
+                default:
+                  return q;
+              }
+
+          }
+
+        case d:
+          return q;
+      }
+    }
+  }
+
+  function v(a) {
+    return u(a) === m;
+  }
+
+  exports.typeOf = u;
+  exports.AsyncMode = l;
+  exports.ConcurrentMode = m;
+  exports.ContextConsumer = k;
+  exports.ContextProvider = h;
+  exports.Element = c;
+  exports.ForwardRef = n;
+  exports.Fragment = e;
+  exports.Profiler = g;
+  exports.Portal = d;
+  exports.StrictMode = f;
+
+  exports.isValidElementType = function (a) {
+    return "string" === typeof a || "function" === typeof a || a === e || a === m || a === g || a === f || a === p || "object" === typeof a && null !== a && (a.$$typeof === t || a.$$typeof === r || a.$$typeof === h || a.$$typeof === k || a.$$typeof === n);
+  };
+
+  exports.isAsyncMode = function (a) {
+    return v(a) || u(a) === l;
+  };
+
+  exports.isConcurrentMode = v;
+
+  exports.isContextConsumer = function (a) {
+    return u(a) === k;
+  };
+
+  exports.isContextProvider = function (a) {
+    return u(a) === h;
+  };
+
+  exports.isElement = function (a) {
+    return "object" === typeof a && null !== a && a.$$typeof === c;
+  };
+
+  exports.isForwardRef = function (a) {
+    return u(a) === n;
+  };
+
+  exports.isFragment = function (a) {
+    return u(a) === e;
+  };
+
+  exports.isProfiler = function (a) {
+    return u(a) === g;
+  };
+
+  exports.isPortal = function (a) {
+    return u(a) === d;
+  };
+
+  exports.isStrictMode = function (a) {
+    return u(a) === f;
+  };
+},549,[],"node_modules\\react-is\\cjs\\react-is.production.min.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  /** @license React v16.6.1
+   * react-is.development.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+  'use strict';
+
+  if (process.env.NODE_ENV !== "production") {
+    (function () {
+      'use strict';
+
+      Object.defineProperty(exports, '__esModule', {
+        value: true
+      });
+      var hasSymbol = typeof Symbol === 'function' && (typeof Symbol === "function" ? Symbol.for : "@@for");
+      var REACT_ELEMENT_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.element') : 0xeac7;
+      var REACT_PORTAL_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.portal') : 0xeaca;
+      var REACT_FRAGMENT_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.fragment') : 0xeacb;
+      var REACT_STRICT_MODE_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.strict_mode') : 0xeacc;
+      var REACT_PROFILER_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.profiler') : 0xead2;
+      var REACT_PROVIDER_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.provider') : 0xeacd;
+      var REACT_CONTEXT_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.context') : 0xeace;
+      var REACT_ASYNC_MODE_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.async_mode') : 0xeacf;
+      var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.concurrent_mode') : 0xeacf;
+      var REACT_FORWARD_REF_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.forward_ref') : 0xead0;
+      var REACT_SUSPENSE_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.suspense') : 0xead1;
+      var REACT_MEMO_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.memo') : 0xead3;
+      var REACT_LAZY_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.lazy') : 0xead4;
+
+      function isValidElementType(type) {
+        return typeof type === 'string' || typeof type === 'function' || type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE);
+      }
+
+      var lowPriorityWarning = function lowPriorityWarning() {};
+
+      {
+        var printWarning = function printWarning(format) {
+          for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            args[_key - 1] = arguments[_key];
+          }
+
+          var argIndex = 0;
+          var message = 'Warning: ' + format.replace(/%s/g, function () {
+            return args[argIndex++];
+          });
+
+          if (typeof console !== 'undefined') {
+            console.warn(message);
+          }
+
+          try {
+            throw new Error(message);
+          } catch (x) {}
+        };
+
+        lowPriorityWarning = function lowPriorityWarning(condition, format) {
+          if (format === undefined) {
+            throw new Error('`lowPriorityWarning(condition, format, ...args)` requires a warning ' + 'message argument');
+          }
+
+          if (!condition) {
+            for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+              args[_key2 - 2] = arguments[_key2];
+            }
+
+            printWarning.apply(undefined, [format].concat(args));
+          }
+        };
+      }
+      var lowPriorityWarning$1 = lowPriorityWarning;
+
+      function typeOf(object) {
+        if (typeof object === 'object' && object !== null) {
+          var $$typeof = object.$$typeof;
+
+          switch ($$typeof) {
+            case REACT_ELEMENT_TYPE:
+              var type = object.type;
+
+              switch (type) {
+                case REACT_ASYNC_MODE_TYPE:
+                case REACT_CONCURRENT_MODE_TYPE:
+                case REACT_FRAGMENT_TYPE:
+                case REACT_PROFILER_TYPE:
+                case REACT_STRICT_MODE_TYPE:
+                  return type;
+
+                default:
+                  var $$typeofType = type && type.$$typeof;
+
+                  switch ($$typeofType) {
+                    case REACT_CONTEXT_TYPE:
+                    case REACT_FORWARD_REF_TYPE:
+                    case REACT_PROVIDER_TYPE:
+                      return $$typeofType;
+
+                    default:
+                      return $$typeof;
+                  }
+
+              }
+
+            case REACT_PORTAL_TYPE:
+              return $$typeof;
+          }
+        }
+
+        return undefined;
+      }
+
+      var AsyncMode = REACT_ASYNC_MODE_TYPE;
+      var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+      var ContextConsumer = REACT_CONTEXT_TYPE;
+      var ContextProvider = REACT_PROVIDER_TYPE;
+      var Element = REACT_ELEMENT_TYPE;
+      var ForwardRef = REACT_FORWARD_REF_TYPE;
+      var Fragment = REACT_FRAGMENT_TYPE;
+      var Profiler = REACT_PROFILER_TYPE;
+      var Portal = REACT_PORTAL_TYPE;
+      var StrictMode = REACT_STRICT_MODE_TYPE;
+      var hasWarnedAboutDeprecatedIsAsyncMode = false;
+
+      function isAsyncMode(object) {
+        {
+          if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+            hasWarnedAboutDeprecatedIsAsyncMode = true;
+            lowPriorityWarning$1(false, 'The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+          }
+        }
+        return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+      }
+
+      function isConcurrentMode(object) {
+        return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+      }
+
+      function isContextConsumer(object) {
+        return typeOf(object) === REACT_CONTEXT_TYPE;
+      }
+
+      function isContextProvider(object) {
+        return typeOf(object) === REACT_PROVIDER_TYPE;
+      }
+
+      function isElement(object) {
+        return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+      }
+
+      function isForwardRef(object) {
+        return typeOf(object) === REACT_FORWARD_REF_TYPE;
+      }
+
+      function isFragment(object) {
+        return typeOf(object) === REACT_FRAGMENT_TYPE;
+      }
+
+      function isProfiler(object) {
+        return typeOf(object) === REACT_PROFILER_TYPE;
+      }
+
+      function isPortal(object) {
+        return typeOf(object) === REACT_PORTAL_TYPE;
+      }
+
+      function isStrictMode(object) {
+        return typeOf(object) === REACT_STRICT_MODE_TYPE;
+      }
+
+      exports.typeOf = typeOf;
+      exports.AsyncMode = AsyncMode;
+      exports.ConcurrentMode = ConcurrentMode;
+      exports.ContextConsumer = ContextConsumer;
+      exports.ContextProvider = ContextProvider;
+      exports.Element = Element;
+      exports.ForwardRef = ForwardRef;
+      exports.Fragment = Fragment;
+      exports.Profiler = Profiler;
+      exports.Portal = Portal;
+      exports.StrictMode = StrictMode;
+      exports.isValidElementType = isValidElementType;
+      exports.isAsyncMode = isAsyncMode;
+      exports.isConcurrentMode = isConcurrentMode;
+      exports.isContextConsumer = isContextConsumer;
+      exports.isContextProvider = isContextProvider;
+      exports.isElement = isElement;
+      exports.isForwardRef = isForwardRef;
+      exports.isFragment = isFragment;
+      exports.isProfiler = isProfiler;
+      exports.isPortal = isPortal;
+      exports.isStrictMode = isStrictMode;
+    })();
+  }
+},550,[],"node_modules\\react-is\\cjs\\react-is.development.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  'use strict';
+
+  var invariant = function invariant(condition, format, a, b, c, d, e, f) {
+    if (process.env.NODE_ENV !== 'production') {
+      if (format === undefined) {
+        throw new Error('invariant requires an error message argument');
+      }
+    }
+
+    if (!condition) {
+      var error;
+
+      if (format === undefined) {
+        error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+      } else {
+        var args = [a, b, c, d, e, f];
+        var argIndex = 0;
+        error = new Error(format.replace(/%s/g, function () {
+          return args[argIndex++];
+        }));
+        error.name = 'Invariant Violation';
+      }
+
+      error.framesToPop = 1;
+      throw error;
+    }
+  };
+
+  module.exports = invariant;
+},551,[],"node_modules\\invariant\\browser.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.createConnect = createConnect;
+  exports.default = void 0;
+
+  var _extends2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/extends"));
+
+  var _objectWithoutPropertiesLoose2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/objectWithoutPropertiesLoose"));
+
+  var _connectAdvanced = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../components/connectAdvanced"));
+
+  var _shallowEqual = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../utils/shallowEqual"));
+
+  var _mapDispatchToProps = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "./mapDispatchToProps"));
+
+  var _mapStateToProps = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "./mapStateToProps"));
+
+  var _mergeProps = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "./mergeProps"));
+
+  var _selectorFactory = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "./selectorFactory"));
+
+  function match(arg, factories, name) {
+    for (var i = factories.length - 1; i >= 0; i--) {
+      var result = factories[i](arg);
+      if (result) return result;
+    }
+
+    return function (dispatch, options) {
+      throw new Error("Invalid value of type " + typeof arg + " for " + name + " argument when connecting component " + options.wrappedComponentName + ".");
+    };
+  }
+
+  function strictEqual(a, b) {
+    return a === b;
+  }
+
+  function createConnect(_temp) {
+    var _ref = _temp === void 0 ? {} : _temp,
+        _ref$connectHOC = _ref.connectHOC,
+        connectHOC = _ref$connectHOC === void 0 ? _connectAdvanced.default : _ref$connectHOC,
+        _ref$mapStateToPropsF = _ref.mapStateToPropsFactories,
+        mapStateToPropsFactories = _ref$mapStateToPropsF === void 0 ? _mapStateToProps.default : _ref$mapStateToPropsF,
+        _ref$mapDispatchToPro = _ref.mapDispatchToPropsFactories,
+        mapDispatchToPropsFactories = _ref$mapDispatchToPro === void 0 ? _mapDispatchToProps.default : _ref$mapDispatchToPro,
+        _ref$mergePropsFactor = _ref.mergePropsFactories,
+        mergePropsFactories = _ref$mergePropsFactor === void 0 ? _mergeProps.default : _ref$mergePropsFactor,
+        _ref$selectorFactory = _ref.selectorFactory,
+        selectorFactory = _ref$selectorFactory === void 0 ? _selectorFactory.default : _ref$selectorFactory;
+
+    return function connect(mapStateToProps, mapDispatchToProps, mergeProps, _ref2) {
+      if (_ref2 === void 0) {
+        _ref2 = {};
+      }
+
+      var _ref3 = _ref2,
+          _ref3$pure = _ref3.pure,
+          pure = _ref3$pure === void 0 ? true : _ref3$pure,
+          _ref3$areStatesEqual = _ref3.areStatesEqual,
+          areStatesEqual = _ref3$areStatesEqual === void 0 ? strictEqual : _ref3$areStatesEqual,
+          _ref3$areOwnPropsEqua = _ref3.areOwnPropsEqual,
+          areOwnPropsEqual = _ref3$areOwnPropsEqua === void 0 ? _shallowEqual.default : _ref3$areOwnPropsEqua,
+          _ref3$areStatePropsEq = _ref3.areStatePropsEqual,
+          areStatePropsEqual = _ref3$areStatePropsEq === void 0 ? _shallowEqual.default : _ref3$areStatePropsEq,
+          _ref3$areMergedPropsE = _ref3.areMergedPropsEqual,
+          areMergedPropsEqual = _ref3$areMergedPropsE === void 0 ? _shallowEqual.default : _ref3$areMergedPropsE,
+          extraOptions = (0, _objectWithoutPropertiesLoose2.default)(_ref3, ["pure", "areStatesEqual", "areOwnPropsEqual", "areStatePropsEqual", "areMergedPropsEqual"]);
+      var initMapStateToProps = match(mapStateToProps, mapStateToPropsFactories, 'mapStateToProps');
+      var initMapDispatchToProps = match(mapDispatchToProps, mapDispatchToPropsFactories, 'mapDispatchToProps');
+      var initMergeProps = match(mergeProps, mergePropsFactories, 'mergeProps');
+      return connectHOC(selectorFactory, (0, _extends2.default)({
+        methodName: 'connect',
+        getDisplayName: function getDisplayName(name) {
+          return "Connect(" + name + ")";
+        },
+        shouldHandleStateChanges: Boolean(mapStateToProps),
+        initMapStateToProps: initMapStateToProps,
+        initMapDispatchToProps: initMapDispatchToProps,
+        initMergeProps: initMergeProps,
+        pure: pure,
+        areStatesEqual: areStatesEqual,
+        areOwnPropsEqual: areOwnPropsEqual,
+        areStatePropsEqual: areStatePropsEqual,
+        areMergedPropsEqual: areMergedPropsEqual
+      }, extraOptions));
+    };
+  }
+
+  var _default = createConnect();
+
+  exports.default = _default;
+},552,[1,8,7,546,553,554,562,563,564],"node_modules\\react-redux\\lib\\connect\\connect.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  exports.__esModule = true;
+  exports.default = shallowEqual;
+  var hasOwn = Object.prototype.hasOwnProperty;
+
+  function is(x, y) {
+    if (x === y) {
+      return x !== 0 || y !== 0 || 1 / x === 1 / y;
+    } else {
+      return x !== x && y !== y;
+    }
+  }
+
+  function shallowEqual(objA, objB) {
+    if (is(objA, objB)) return true;
+
+    if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+      return false;
+    }
+
+    var keysA = Object.keys(objA);
+    var keysB = Object.keys(objB);
+    if (keysA.length !== keysB.length) return false;
+
+    for (var i = 0; i < keysA.length; i++) {
+      if (!hasOwn.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+},553,[],"node_modules\\react-redux\\lib\\utils\\shallowEqual.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  exports.__esModule = true;
+  exports.whenMapDispatchToPropsIsFunction = whenMapDispatchToPropsIsFunction;
+  exports.whenMapDispatchToPropsIsMissing = whenMapDispatchToPropsIsMissing;
+  exports.whenMapDispatchToPropsIsObject = whenMapDispatchToPropsIsObject;
+  exports.default = void 0;
+
+  var _redux = _$$_REQUIRE(_dependencyMap[0], "redux");
+
+  var _wrapMapToProps = _$$_REQUIRE(_dependencyMap[1], "./wrapMapToProps");
+
+  function whenMapDispatchToPropsIsFunction(mapDispatchToProps) {
+    return typeof mapDispatchToProps === 'function' ? (0, _wrapMapToProps.wrapMapToPropsFunc)(mapDispatchToProps, 'mapDispatchToProps') : undefined;
+  }
+
+  function whenMapDispatchToPropsIsMissing(mapDispatchToProps) {
+    return !mapDispatchToProps ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function (dispatch) {
+      return {
+        dispatch: dispatch
+      };
+    }) : undefined;
+  }
+
+  function whenMapDispatchToPropsIsObject(mapDispatchToProps) {
+    return mapDispatchToProps && typeof mapDispatchToProps === 'object' ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function (dispatch) {
+      return (0, _redux.bindActionCreators)(mapDispatchToProps, dispatch);
+    }) : undefined;
+  }
+
+  var _default = [whenMapDispatchToPropsIsFunction, whenMapDispatchToPropsIsMissing, whenMapDispatchToPropsIsObject];
+  exports.default = _default;
+},554,[555,558],"node_modules\\react-redux\\lib\\connect\\mapDispatchToProps.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  'use strict';
+
+  Object.defineProperty(exports, '__esModule', {
+    value: true
+  });
+
+  function _interopDefault(ex) {
+    return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
+  }
+
+  var $$observable = _interopDefault(_$$_REQUIRE(_dependencyMap[0], "symbol-observable"));
+
+  var randomString = function randomString() {
+    return Math.random().toString(36).substring(7).split('').join('.');
+  };
+
+  var ActionTypes = {
+    INIT: "@@redux/INIT" + randomString(),
+    REPLACE: "@@redux/REPLACE" + randomString(),
+    PROBE_UNKNOWN_ACTION: function PROBE_UNKNOWN_ACTION() {
+      return "@@redux/PROBE_UNKNOWN_ACTION" + randomString();
+    }
+  };
+
+  function isPlainObject(obj) {
+    if (typeof obj !== 'object' || obj === null) return false;
+    var proto = obj;
+
+    while (Object.getPrototypeOf(proto) !== null) {
+      proto = Object.getPrototypeOf(proto);
+    }
+
+    return Object.getPrototypeOf(obj) === proto;
+  }
+
+  function createStore(reducer, preloadedState, enhancer) {
+    var _ref2;
+
+    if (typeof preloadedState === 'function' && typeof enhancer === 'function' || typeof enhancer === 'function' && typeof arguments[3] === 'function') {
+      throw new Error('It looks like you are passing several store enhancers to ' + 'createStore(). This is not supported. Instead, compose them ' + 'together to a single function');
+    }
+
+    if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+      enhancer = preloadedState;
+      preloadedState = undefined;
+    }
+
+    if (typeof enhancer !== 'undefined') {
+      if (typeof enhancer !== 'function') {
+        throw new Error('Expected the enhancer to be a function.');
+      }
+
+      return enhancer(createStore)(reducer, preloadedState);
+    }
+
+    if (typeof reducer !== 'function') {
+      throw new Error('Expected the reducer to be a function.');
+    }
+
+    var currentReducer = reducer;
+    var currentState = preloadedState;
+    var currentListeners = [];
+    var nextListeners = currentListeners;
+    var isDispatching = false;
+
+    function ensureCanMutateNextListeners() {
+      if (nextListeners === currentListeners) {
+        nextListeners = currentListeners.slice();
+      }
+    }
+
+    function getState() {
+      if (isDispatching) {
+        throw new Error('You may not call store.getState() while the reducer is executing. ' + 'The reducer has already received the state as an argument. ' + 'Pass it down from the top reducer instead of reading it from the store.');
+      }
+
+      return currentState;
+    }
+
+    function subscribe(listener) {
+      if (typeof listener !== 'function') {
+        throw new Error('Expected the listener to be a function.');
+      }
+
+      if (isDispatching) {
+        throw new Error('You may not call store.subscribe() while the reducer is executing. ' + 'If you would like to be notified after the store has been updated, subscribe from a ' + 'component and invoke store.getState() in the callback to access the latest state. ' + 'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.');
+      }
+
+      var isSubscribed = true;
+      ensureCanMutateNextListeners();
+      nextListeners.push(listener);
+      return function unsubscribe() {
+        if (!isSubscribed) {
+          return;
+        }
+
+        if (isDispatching) {
+          throw new Error('You may not unsubscribe from a store listener while the reducer is executing. ' + 'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.');
+        }
+
+        isSubscribed = false;
+        ensureCanMutateNextListeners();
+        var index = nextListeners.indexOf(listener);
+        nextListeners.splice(index, 1);
+      };
+    }
+
+    function dispatch(action) {
+      if (!isPlainObject(action)) {
+        throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+      }
+
+      if (typeof action.type === 'undefined') {
+        throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+      }
+
+      if (isDispatching) {
+        throw new Error('Reducers may not dispatch actions.');
+      }
+
+      try {
+        isDispatching = true;
+        currentState = currentReducer(currentState, action);
+      } finally {
+        isDispatching = false;
+      }
+
+      var listeners = currentListeners = nextListeners;
+
+      for (var i = 0; i < listeners.length; i++) {
+        var listener = listeners[i];
+        listener();
+      }
+
+      return action;
+    }
+
+    function replaceReducer(nextReducer) {
+      if (typeof nextReducer !== 'function') {
+        throw new Error('Expected the nextReducer to be a function.');
+      }
+
+      currentReducer = nextReducer;
+      dispatch({
+        type: ActionTypes.REPLACE
+      });
+    }
+
+    function observable() {
+      var _ref;
+
+      var outerSubscribe = subscribe;
+      return _ref = {
+        subscribe: function subscribe(observer) {
+          if (typeof observer !== 'object' || observer === null) {
+            throw new TypeError('Expected the observer to be an object.');
+          }
+
+          function observeState() {
+            if (observer.next) {
+              observer.next(getState());
+            }
+          }
+
+          observeState();
+          var unsubscribe = outerSubscribe(observeState);
+          return {
+            unsubscribe: unsubscribe
+          };
+        }
+      }, _ref[$$observable] = function () {
+        return this;
+      }, _ref;
+    }
+
+    dispatch({
+      type: ActionTypes.INIT
+    });
+    return _ref2 = {
+      dispatch: dispatch,
+      subscribe: subscribe,
+      getState: getState,
+      replaceReducer: replaceReducer
+    }, _ref2[$$observable] = observable, _ref2;
+  }
+
+  function warning(message) {
+    if (typeof console !== 'undefined' && typeof console.error === 'function') {
+      console.error(message);
+    }
+
+    try {
+      throw new Error(message);
+    } catch (e) {}
+  }
+
+  function getUndefinedStateErrorMessage(key, action) {
+    var actionType = action && action.type;
+    var actionDescription = actionType && "action \"" + String(actionType) + "\"" || 'an action';
+    return "Given " + actionDescription + ", reducer \"" + key + "\" returned undefined. " + "To ignore an action, you must explicitly return the previous state. " + "If you want this reducer to hold no value, you can return null instead of undefined.";
+  }
+
+  function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+    var reducerKeys = Object.keys(reducers);
+    var argumentName = action && action.type === ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+    if (reducerKeys.length === 0) {
+      return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+    }
+
+    if (!isPlainObject(inputState)) {
+      return "The " + argumentName + " has unexpected type of \"" + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + "\". Expected argument to be an object with the following " + ("keys: \"" + reducerKeys.join('", "') + "\"");
+    }
+
+    var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+      return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+    });
+    unexpectedKeys.forEach(function (key) {
+      unexpectedKeyCache[key] = true;
+    });
+    if (action && action.type === ActionTypes.REPLACE) return;
+
+    if (unexpectedKeys.length > 0) {
+      return "Unexpected " + (unexpectedKeys.length > 1 ? 'keys' : 'key') + " " + ("\"" + unexpectedKeys.join('", "') + "\" found in " + argumentName + ". ") + "Expected to find one of the known reducer keys instead: " + ("\"" + reducerKeys.join('", "') + "\". Unexpected keys will be ignored.");
+    }
+  }
+
+  function assertReducerShape(reducers) {
+    Object.keys(reducers).forEach(function (key) {
+      var reducer = reducers[key];
+      var initialState = reducer(undefined, {
+        type: ActionTypes.INIT
+      });
+
+      if (typeof initialState === 'undefined') {
+        throw new Error("Reducer \"" + key + "\" returned undefined during initialization. " + "If the state passed to the reducer is undefined, you must " + "explicitly return the initial state. The initial state may " + "not be undefined. If you don't want to set a value for this reducer, " + "you can use null instead of undefined.");
+      }
+
+      if (typeof reducer(undefined, {
+        type: ActionTypes.PROBE_UNKNOWN_ACTION()
+      }) === 'undefined') {
+        throw new Error("Reducer \"" + key + "\" returned undefined when probed with a random type. " + ("Don't try to handle " + ActionTypes.INIT + " or other actions in \"redux/*\" ") + "namespace. They are considered private. Instead, you must return the " + "current state for any unknown actions, unless it is undefined, " + "in which case you must return the initial state, regardless of the " + "action type. The initial state may not be undefined, but can be null.");
+      }
+    });
+  }
+
+  function combineReducers(reducers) {
+    var reducerKeys = Object.keys(reducers);
+    var finalReducers = {};
+
+    for (var i = 0; i < reducerKeys.length; i++) {
+      var key = reducerKeys[i];
+
+      if (process.env.NODE_ENV !== 'production') {
+        if (typeof reducers[key] === 'undefined') {
+          warning("No reducer provided for key \"" + key + "\"");
+        }
+      }
+
+      if (typeof reducers[key] === 'function') {
+        finalReducers[key] = reducers[key];
+      }
+    }
+
+    var finalReducerKeys = Object.keys(finalReducers);
+    var unexpectedKeyCache;
+
+    if (process.env.NODE_ENV !== 'production') {
+      unexpectedKeyCache = {};
+    }
+
+    var shapeAssertionError;
+
+    try {
+      assertReducerShape(finalReducers);
+    } catch (e) {
+      shapeAssertionError = e;
+    }
+
+    return function combination(state, action) {
+      if (state === void 0) {
+        state = {};
+      }
+
+      if (shapeAssertionError) {
+        throw shapeAssertionError;
+      }
+
+      if (process.env.NODE_ENV !== 'production') {
+        var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+
+        if (warningMessage) {
+          warning(warningMessage);
+        }
+      }
+
+      var hasChanged = false;
+      var nextState = {};
+
+      for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+        var _key = finalReducerKeys[_i];
+        var reducer = finalReducers[_key];
+        var previousStateForKey = state[_key];
+        var nextStateForKey = reducer(previousStateForKey, action);
+
+        if (typeof nextStateForKey === 'undefined') {
+          var errorMessage = getUndefinedStateErrorMessage(_key, action);
+          throw new Error(errorMessage);
+        }
+
+        nextState[_key] = nextStateForKey;
+        hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+      }
+
+      return hasChanged ? nextState : state;
+    };
+  }
+
+  function bindActionCreator(actionCreator, dispatch) {
+    return function () {
+      return dispatch(actionCreator.apply(this, arguments));
+    };
+  }
+
+  function bindActionCreators(actionCreators, dispatch) {
+    if (typeof actionCreators === 'function') {
+      return bindActionCreator(actionCreators, dispatch);
+    }
+
+    if (typeof actionCreators !== 'object' || actionCreators === null) {
+      throw new Error("bindActionCreators expected an object or a function, instead received " + (actionCreators === null ? 'null' : typeof actionCreators) + ". " + "Did you write \"import ActionCreators from\" instead of \"import * as ActionCreators from\"?");
+    }
+
+    var keys = Object.keys(actionCreators);
+    var boundActionCreators = {};
+
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      var actionCreator = actionCreators[key];
+
+      if (typeof actionCreator === 'function') {
+        boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+      }
+    }
+
+    return boundActionCreators;
+  }
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function _objectSpread(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      var ownKeys = Object.keys(source);
+
+      if (typeof Object.getOwnPropertySymbols === 'function') {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
+      }
+
+      ownKeys.forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    }
+
+    return target;
+  }
+
+  function compose() {
+    for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+      funcs[_key] = arguments[_key];
+    }
+
+    if (funcs.length === 0) {
+      return function (arg) {
+        return arg;
+      };
+    }
+
+    if (funcs.length === 1) {
+      return funcs[0];
+    }
+
+    return funcs.reduce(function (a, b) {
+      return function () {
+        return a(b.apply(void 0, arguments));
+      };
+    });
+  }
+
+  function applyMiddleware() {
+    for (var _len = arguments.length, middlewares = new Array(_len), _key = 0; _key < _len; _key++) {
+      middlewares[_key] = arguments[_key];
+    }
+
+    return function (createStore) {
+      return function () {
+        var store = createStore.apply(void 0, arguments);
+
+        var _dispatch = function dispatch() {
+          throw new Error("Dispatching while constructing your middleware is not allowed. " + "Other middleware would not be applied to this dispatch.");
+        };
+
+        var middlewareAPI = {
+          getState: store.getState,
+          dispatch: function dispatch() {
+            return _dispatch.apply(void 0, arguments);
+          }
+        };
+        var chain = middlewares.map(function (middleware) {
+          return middleware(middlewareAPI);
+        });
+        _dispatch = compose.apply(void 0, chain)(store.dispatch);
+        return _objectSpread({}, store, {
+          dispatch: _dispatch
+        });
+      };
+    };
+  }
+
+  function isCrushed() {}
+
+  if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+    warning('You are currently using minified code outside of NODE_ENV === "production". ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) ' + 'to ensure you have the correct code for your production build.');
+  }
+
+  exports.createStore = createStore;
+  exports.combineReducers = combineReducers;
+  exports.bindActionCreators = bindActionCreators;
+  exports.applyMiddleware = applyMiddleware;
+  exports.compose = compose;
+  exports.__DO_NOT_USE__ActionTypes = ActionTypes;
+},555,[556],"node_modules\\redux\\lib\\redux.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _ponyfill = _$$_REQUIRE(_dependencyMap[0], "./ponyfill.js");
+
+  var _ponyfill2 = _interopRequireDefault(_ponyfill);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      'default': obj
+    };
+  }
+
+  var root;
+
+  if (typeof self !== 'undefined') {
+    root = self;
+  } else if (typeof window !== 'undefined') {
+    root = window;
+  } else if (typeof global !== 'undefined') {
+    root = global;
+  } else if (typeof module !== 'undefined') {
+    root = module;
+  } else {
+    root = Function('return this')();
+  }
+
+  var result = (0, _ponyfill2['default'])(root);
+  exports['default'] = result;
+},556,[557],"node_modules\\symbol-observable\\lib\\index.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports['default'] = symbolObservablePonyfill;
+
+  function symbolObservablePonyfill(root) {
+    var result;
+    var _Symbol = root.Symbol;
+
+    if (typeof _Symbol === 'function') {
+      if (_Symbol.observable) {
+        result = _Symbol.observable;
+      } else {
+        result = _Symbol('observable');
+        _Symbol.observable = result;
+      }
+    } else {
+      result = '@@observable';
+    }
+
+    return result;
+  }
+
+  ;
+},557,[],"node_modules\\symbol-observable\\lib\\ponyfill.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.wrapMapToPropsConstant = wrapMapToPropsConstant;
+  exports.getDependsOnOwnProps = getDependsOnOwnProps;
+  exports.wrapMapToPropsFunc = wrapMapToPropsFunc;
+
+  var _verifyPlainObject = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "../utils/verifyPlainObject"));
+
+  function wrapMapToPropsConstant(getConstant) {
+    return function initConstantSelector(dispatch, options) {
+      var constant = getConstant(dispatch, options);
+
+      function constantSelector() {
+        return constant;
+      }
+
+      constantSelector.dependsOnOwnProps = false;
+      return constantSelector;
+    };
+  }
+
+  function getDependsOnOwnProps(mapToProps) {
+    return mapToProps.dependsOnOwnProps !== null && mapToProps.dependsOnOwnProps !== undefined ? Boolean(mapToProps.dependsOnOwnProps) : mapToProps.length !== 1;
+  }
+
+  function wrapMapToPropsFunc(mapToProps, methodName) {
+    return function initProxySelector(dispatch, _ref) {
+      var displayName = _ref.displayName;
+
+      var proxy = function mapToPropsProxy(stateOrDispatch, ownProps) {
+        return proxy.dependsOnOwnProps ? proxy.mapToProps(stateOrDispatch, ownProps) : proxy.mapToProps(stateOrDispatch);
+      };
+
+      proxy.dependsOnOwnProps = true;
+
+      proxy.mapToProps = function detectFactoryAndVerify(stateOrDispatch, ownProps) {
+        proxy.mapToProps = mapToProps;
+        proxy.dependsOnOwnProps = getDependsOnOwnProps(mapToProps);
+        var props = proxy(stateOrDispatch, ownProps);
+
+        if (typeof props === 'function') {
+          proxy.mapToProps = props;
+          proxy.dependsOnOwnProps = getDependsOnOwnProps(props);
+          props = proxy(stateOrDispatch, ownProps);
+        }
+
+        if (process.env.NODE_ENV !== 'production') (0, _verifyPlainObject.default)(props, displayName, methodName);
+        return props;
+      };
+
+      return proxy;
+    };
+  }
+},558,[1,559],"node_modules\\react-redux\\lib\\connect\\wrapMapToProps.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.default = verifyPlainObject;
+
+  var _isPlainObject = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "./isPlainObject"));
+
+  var _warning = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "./warning"));
+
+  function verifyPlainObject(value, displayName, methodName) {
+    if (!(0, _isPlainObject.default)(value)) {
+      (0, _warning.default)(methodName + "() in " + displayName + " must return a plain object. Instead received " + value + ".");
+    }
+  }
+},559,[1,560,561],"node_modules\\react-redux\\lib\\utils\\verifyPlainObject.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  exports.__esModule = true;
+  exports.default = isPlainObject;
+
+  function isPlainObject(obj) {
+    if (typeof obj !== 'object' || obj === null) return false;
+    var proto = Object.getPrototypeOf(obj);
+    if (proto === null) return true;
+    var baseProto = proto;
+
+    while (Object.getPrototypeOf(baseProto) !== null) {
+      baseProto = Object.getPrototypeOf(baseProto);
+    }
+
+    return proto === baseProto;
+  }
+},560,[],"node_modules\\react-redux\\lib\\utils\\isPlainObject.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  exports.__esModule = true;
+  exports.default = warning;
+
+  function warning(message) {
+    if (typeof console !== 'undefined' && typeof console.error === 'function') {
+      console.error(message);
+    }
+
+    try {
+      throw new Error(message);
+    } catch (e) {}
+  }
+},561,[],"node_modules\\react-redux\\lib\\utils\\warning.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  exports.__esModule = true;
+  exports.whenMapStateToPropsIsFunction = whenMapStateToPropsIsFunction;
+  exports.whenMapStateToPropsIsMissing = whenMapStateToPropsIsMissing;
+  exports.default = void 0;
+
+  var _wrapMapToProps = _$$_REQUIRE(_dependencyMap[0], "./wrapMapToProps");
+
+  function whenMapStateToPropsIsFunction(mapStateToProps) {
+    return typeof mapStateToProps === 'function' ? (0, _wrapMapToProps.wrapMapToPropsFunc)(mapStateToProps, 'mapStateToProps') : undefined;
+  }
+
+  function whenMapStateToPropsIsMissing(mapStateToProps) {
+    return !mapStateToProps ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function () {
+      return {};
+    }) : undefined;
+  }
+
+  var _default = [whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing];
+  exports.default = _default;
+},562,[558],"node_modules\\react-redux\\lib\\connect\\mapStateToProps.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.defaultMergeProps = defaultMergeProps;
+  exports.wrapMergePropsFunc = wrapMergePropsFunc;
+  exports.whenMergePropsIsFunction = whenMergePropsIsFunction;
+  exports.whenMergePropsIsOmitted = whenMergePropsIsOmitted;
+  exports.default = void 0;
+
+  var _extends2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/extends"));
+
+  var _verifyPlainObject = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "../utils/verifyPlainObject"));
+
+  function defaultMergeProps(stateProps, dispatchProps, ownProps) {
+    return (0, _extends2.default)({}, ownProps, stateProps, dispatchProps);
+  }
+
+  function wrapMergePropsFunc(mergeProps) {
+    return function initMergePropsProxy(dispatch, _ref) {
+      var displayName = _ref.displayName,
+          pure = _ref.pure,
+          areMergedPropsEqual = _ref.areMergedPropsEqual;
+      var hasRunOnce = false;
+      var mergedProps;
+      return function mergePropsProxy(stateProps, dispatchProps, ownProps) {
+        var nextMergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+
+        if (hasRunOnce) {
+          if (!pure || !areMergedPropsEqual(nextMergedProps, mergedProps)) mergedProps = nextMergedProps;
+        } else {
+          hasRunOnce = true;
+          mergedProps = nextMergedProps;
+          if (process.env.NODE_ENV !== 'production') (0, _verifyPlainObject.default)(mergedProps, displayName, 'mergeProps');
+        }
+
+        return mergedProps;
+      };
+    };
+  }
+
+  function whenMergePropsIsFunction(mergeProps) {
+    return typeof mergeProps === 'function' ? wrapMergePropsFunc(mergeProps) : undefined;
+  }
+
+  function whenMergePropsIsOmitted(mergeProps) {
+    return !mergeProps ? function () {
+      return defaultMergeProps;
+    } : undefined;
+  }
+
+  var _default = [whenMergePropsIsFunction, whenMergePropsIsOmitted];
+  exports.default = _default;
+},563,[1,8,559],"node_modules\\react-redux\\lib\\connect\\mergeProps.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.impureFinalPropsSelectorFactory = impureFinalPropsSelectorFactory;
+  exports.pureFinalPropsSelectorFactory = pureFinalPropsSelectorFactory;
+  exports.default = finalPropsSelectorFactory;
+
+  var _objectWithoutPropertiesLoose2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/objectWithoutPropertiesLoose"));
+
+  var _verifySubselectors = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "./verifySubselectors"));
+
+  function impureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch) {
+    return function impureFinalPropsSelector(state, ownProps) {
+      return mergeProps(mapStateToProps(state, ownProps), mapDispatchToProps(dispatch, ownProps), ownProps);
+    };
+  }
+
+  function pureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, _ref) {
+    var areStatesEqual = _ref.areStatesEqual,
+        areOwnPropsEqual = _ref.areOwnPropsEqual,
+        areStatePropsEqual = _ref.areStatePropsEqual;
+    var hasRunAtLeastOnce = false;
+    var state;
+    var ownProps;
+    var stateProps;
+    var dispatchProps;
+    var mergedProps;
+
+    function handleFirstCall(firstState, firstOwnProps) {
+      state = firstState;
+      ownProps = firstOwnProps;
+      stateProps = mapStateToProps(state, ownProps);
+      dispatchProps = mapDispatchToProps(dispatch, ownProps);
+      mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+      hasRunAtLeastOnce = true;
+      return mergedProps;
+    }
+
+    function handleNewPropsAndNewState() {
+      stateProps = mapStateToProps(state, ownProps);
+      if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
+      mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+      return mergedProps;
+    }
+
+    function handleNewProps() {
+      if (mapStateToProps.dependsOnOwnProps) stateProps = mapStateToProps(state, ownProps);
+      if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
+      mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+      return mergedProps;
+    }
+
+    function handleNewState() {
+      var nextStateProps = mapStateToProps(state, ownProps);
+      var statePropsChanged = !areStatePropsEqual(nextStateProps, stateProps);
+      stateProps = nextStateProps;
+      if (statePropsChanged) mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+      return mergedProps;
+    }
+
+    function handleSubsequentCalls(nextState, nextOwnProps) {
+      var propsChanged = !areOwnPropsEqual(nextOwnProps, ownProps);
+      var stateChanged = !areStatesEqual(nextState, state);
+      state = nextState;
+      ownProps = nextOwnProps;
+      if (propsChanged && stateChanged) return handleNewPropsAndNewState();
+      if (propsChanged) return handleNewProps();
+      if (stateChanged) return handleNewState();
+      return mergedProps;
+    }
+
+    return function pureFinalPropsSelector(nextState, nextOwnProps) {
+      return hasRunAtLeastOnce ? handleSubsequentCalls(nextState, nextOwnProps) : handleFirstCall(nextState, nextOwnProps);
+    };
+  }
+
+  function finalPropsSelectorFactory(dispatch, _ref2) {
+    var initMapStateToProps = _ref2.initMapStateToProps,
+        initMapDispatchToProps = _ref2.initMapDispatchToProps,
+        initMergeProps = _ref2.initMergeProps,
+        options = (0, _objectWithoutPropertiesLoose2.default)(_ref2, ["initMapStateToProps", "initMapDispatchToProps", "initMergeProps"]);
+    var mapStateToProps = initMapStateToProps(dispatch, options);
+    var mapDispatchToProps = initMapDispatchToProps(dispatch, options);
+    var mergeProps = initMergeProps(dispatch, options);
+
+    if (process.env.NODE_ENV !== 'production') {
+      (0, _verifySubselectors.default)(mapStateToProps, mapDispatchToProps, mergeProps, options.displayName);
+    }
+
+    var selectorFactory = options.pure ? pureFinalPropsSelectorFactory : impureFinalPropsSelectorFactory;
+    return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
+  }
+},564,[1,7,565],"node_modules\\react-redux\\lib\\connect\\selectorFactory.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  exports.__esModule = true;
+  exports.default = verifySubselectors;
+
+  var _warning = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "../utils/warning"));
+
+  function verify(selector, methodName, displayName) {
+    if (!selector) {
+      throw new Error("Unexpected value for " + methodName + " in " + displayName + ".");
+    } else if (methodName === 'mapStateToProps' || methodName === 'mapDispatchToProps') {
+      if (!selector.hasOwnProperty('dependsOnOwnProps')) {
+        (0, _warning.default)("The selector for " + methodName + " of " + displayName + " did not specify a value for dependsOnOwnProps.");
+      }
+    }
+  }
+
+  function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, displayName) {
+    verify(mapStateToProps, 'mapStateToProps', displayName);
+    verify(mapDispatchToProps, 'mapDispatchToProps', displayName);
+    verify(mergeProps, 'mergeProps', displayName);
+  }
+},565,[1,561],"node_modules\\react-redux\\lib\\connect\\verifySubselectors.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.store = void 0;
+
+  var _redux = _$$_REQUIRE(_dependencyMap[1], "redux");
+
+  var _reduxThunk = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "redux-thunk"));
+
+  var _reducers = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./reducers"));
+
+  var rootReducer = (0, _redux.combineReducers)(_reducers.default);
+  var store = (0, _redux.createStore)(rootReducer, (0, _redux.applyMiddleware)(_reduxThunk.default));
+  exports.store = store;
+},566,[1,555,567,568],"src\\store\\index.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+
+  function createThunkMiddleware(extraArgument) {
+    return function (_ref) {
+      var dispatch = _ref.dispatch,
+          getState = _ref.getState;
+      return function (next) {
+        return function (action) {
+          if (typeof action === 'function') {
+            return action(dispatch, getState, extraArgument);
+          }
+
+          return next(action);
+        };
+      };
+    };
+  }
+
+  var thunk = createThunkMiddleware();
+  thunk.withExtraArgument = createThunkMiddleware;
+  exports['default'] = thunk;
+},567,[],"node_modules\\redux-thunk\\lib\\index.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _defineProperty2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/defineProperty"));
+
+  var _TodoConstants = _$$_REQUIRE(_dependencyMap[2], "../components/todo/TodoConstants");
+
+  var _TodoReducer = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../components/todo/TodoReducer"));
+
+  var reducers = (0, _defineProperty2.default)({}, _TodoConstants.REDUCER_KEY, _TodoReducer.default);
+  var _default = reducers;
+  exports.default = _default;
+},568,[1,44,569,570],"src\\store\\reducers.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.INITIAL_STATE = exports.TOGGLE_TODO = exports.DELETE_TODO = exports.ADD_TODO = exports.REDUCER_KEY = void 0;
+  var REDUCER_KEY = "Todo";
+  exports.REDUCER_KEY = REDUCER_KEY;
+  var ADD_TODO = "ADD_TODO";
+  exports.ADD_TODO = ADD_TODO;
+  var DELETE_TODO = "DELETE_TODO";
+  exports.DELETE_TODO = DELETE_TODO;
+  var TOGGLE_TODO = "TOGGLE_TODO";
+  exports.TOGGLE_TODO = TOGGLE_TODO;
+  var INITIAL_STATE = [{
+    id: 1,
+    name: "Eat",
+    finished: false
+  }, {
+    id: 2,
+    name: "Sleep",
+    finished: false
+  }, {
+    id: 3,
+    name: "Work",
+    finished: false
+  }];
+  exports.INITIAL_STATE = INITIAL_STATE;
+},569,[],"src\\components\\todo\\TodoConstants.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _toConsumableArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/toConsumableArray"));
+
+  var _TodoConstants = _$$_REQUIRE(_dependencyMap[2], "./TodoConstants");
+
+  var todoReducer = function todoReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _TodoConstants.INITIAL_STATE;
+    var action = arguments.length > 1 ? arguments[1] : undefined;
+
+    switch (action.type) {
+      case _TodoConstants.ADD_TODO:
+        var nameOfTheNewTodo = action.payload;
+
+        if (state.some(function (i) {
+          return i.name === nameOfTheNewTodo;
+        })) {
+          return state;
+        }
+
+        var newTodo = {
+          id: Math.max.apply(Math, (0, _toConsumableArray2.default)(state.map(function (i) {
+            return i.id;
+          }))) + 1,
+          name: action.payload,
+          finished: false
+        };
+        return [].concat((0, _toConsumableArray2.default)(state), [newTodo]);
+
+      case _TodoConstants.DELETE_TODO:
+        return state.filter(function (i) {
+          return i.id !== action.payload;
+        });
+
+      case _TodoConstants.TOGGLE_TODO:
+        var result = state.map(function (todoItem) {
+          if (todoItem.name !== action.payload.name) {
+            return todoItem;
+          }
+
+          todoItem.finished = !todoItem.finished;
+          return todoItem;
+        });
+        return result;
+
+      default:
+        return state;
+    }
+  };
+
+  var _default = todoReducer;
+  exports.default = _default;
+},570,[1,15,569],"src\\components\\todo\\TodoReducer.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
   Object.defineProperty(exports, "__esModule", {
@@ -85837,10 +87759,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     About: _AboutScreen.AboutScreen
   });
 
-  var _default = (0, _reactNavigation.createNavigationContainer)(TabNavigator);
+  var _default = (0, _reactNavigation.createAppContainer)(TabNavigator);
 
   exports.default = _default;
-},542,[1,543,668,669],"src\\TabNavigator.tsx");
+},571,[1,572,692,693],"src\\TabNavigator.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = {
     get createAppContainer() {
@@ -86050,7 +87972,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
 
   };
-},543,[544,547,609,635,656],"node_modules\\react-navigation\\src\\react-navigation.js");
+},572,[573,576,633,659,680],"node_modules\\react-navigation\\src\\react-navigation.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = {
     get createAppContainer() {
@@ -86090,7 +88012,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
 
   };
-},544,[545,593,594,595,596,597,600],"node_modules\\@react-navigation\\native\\src\\index.js");
+},573,[574,618,619,620,621,622,625],"node_modules\\@react-navigation\\native\\src\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -86573,7 +88495,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     NavigationContainer = _wrapComponent("NavigationContainer")(NavigationContainer);
     return (0, _reactLifecyclesCompat.polyfill)(NavigationContainer);
   }
-},545,[1,8,95,19,27,30,20,33,6,46,184,2,546,547,591,592],"node_modules\\@react-navigation\\native\\src\\createAppContainer.js");
+},574,[1,8,95,19,27,30,20,33,6,46,184,2,575,576,616,617],"node_modules\\@react-navigation\\native\\src\\createAppContainer.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -86678,7 +88600,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   exports.polyfill = polyfill;
-},546,[],"node_modules\\react-lifecycles-compat\\react-lifecycles-compat.cjs.js");
+},575,[],"node_modules\\react-lifecycles-compat\\react-lifecycles-compat.cjs.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -86772,7 +88694,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
 
   };
-},547,[548,550,557,558,564,552,572,582,584,565,570,566,573,586,574,581,580,587,588,590],"node_modules\\@react-navigation\\core\\dist\\index.js");
+},576,[577,579,586,587,593,581,598,608,610,594,596,595,599,612,600,607,606,613,614,615],"node_modules\\@react-navigation\\core\\dist\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -86915,7 +88837,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   };
   exports.default = StateUtils;
-},548,[549],"node_modules\\@react-navigation\\core\\dist\\StateUtils.js");
+},577,[578],"node_modules\\@react-navigation\\core\\dist\\StateUtils.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -86952,7 +88874,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   module.exports = invariant;
-},549,[],"node_modules\\@react-navigation\\core\\dist\\utils\\invariant.js");
+},578,[],"node_modules\\@react-navigation\\core\\dist\\utils\\invariant.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87045,7 +88967,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
     return navigation;
   }
-},550,[551,553,556],"node_modules\\@react-navigation\\core\\dist\\getNavigation.js");
+},579,[580,582,585],"node_modules\\@react-navigation\\core\\dist\\getNavigation.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87106,7 +89028,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.default = getNavigationActionCreators;
-},551,[552,549],"node_modules\\@react-navigation\\core\\dist\\routers\\getNavigationActionCreators.js");
+},580,[581,578],"node_modules\\@react-navigation\\core\\dist\\routers\\getNavigationActionCreators.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87179,7 +89101,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     navigate: navigate,
     setParams: setParams
   };
-},552,[],"node_modules\\@react-navigation\\core\\dist\\NavigationActions.js");
+},581,[],"node_modules\\@react-navigation\\core\\dist\\NavigationActions.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87316,7 +89238,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   exports.default = _getChildNavigation;
-},553,[554,555,551,556],"node_modules\\@react-navigation\\core\\dist\\getChildNavigation.js");
+},582,[583,584,580,585],"node_modules\\@react-navigation\\core\\dist\\getChildNavigation.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87498,7 +89420,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }
     };
   }
-},554,[],"node_modules\\@react-navigation\\core\\dist\\getChildEventSubscriber.js");
+},583,[],"node_modules\\@react-navigation\\core\\dist\\getChildEventSubscriber.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   "use strict";
 
@@ -87516,7 +89438,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   exports.default = getChildRouter;
-},555,[],"node_modules\\@react-navigation\\core\\dist\\getChildRouter.js");
+},584,[],"node_modules\\@react-navigation\\core\\dist\\getChildRouter.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   "use strict";
 
@@ -87541,7 +89463,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
     return navigation._childrenNavigation;
   }
-},556,[],"node_modules\\@react-navigation\\core\\dist\\getChildrenNavigationCache.js");
+},585,[],"node_modules\\@react-navigation\\core\\dist\\getChildrenNavigationCache.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87670,7 +89592,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   exports.default = createNavigator;
-},557,[19,20,27,30,33,46,546,549],"node_modules\\@react-navigation\\core\\dist\\navigators\\createNavigator.js");
+},586,[19,20,27,30,33,46,575,578],"node_modules\\@react-navigation\\core\\dist\\navigators\\createNavigator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87690,7 +89612,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var NavigationContext = (0, _createReactContext2.default)(undefined);
   exports.default = NavigationContext;
-},558,[559],"node_modules\\@react-navigation\\core\\dist\\views\\NavigationContext.js");
+},587,[588],"node_modules\\@react-navigation\\core\\dist\\views\\NavigationContext.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87712,7 +89634,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   exports.default = _react2.default.createContext || _implementation2.default;
   module.exports = exports['default'];
-},559,[46,560],"node_modules\\create-react-context\\lib\\index.js");
+},588,[46,589],"node_modules\\create-react-context\\lib\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87935,7 +89857,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   exports.default = createReactContext;
   module.exports = exports['default'];
-},560,[46,63,561,562],"node_modules\\create-react-context\\lib\\implementation.js");
+},589,[46,63,590,591],"node_modules\\create-react-context\\lib\\implementation.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87944,7 +89866,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   module.exports = function () {
     return global[key] = (global[key] || 0) + 1;
   };
-},561,[],"node_modules\\gud\\index.js");
+},590,[],"node_modules\\gud\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -87992,7 +89914,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   module.exports = warning;
-},562,[563],"node_modules\\create-react-context\\node_modules\\fbjs\\lib\\warning.js");
+},591,[592],"node_modules\\create-react-context\\node_modules\\fbjs\\lib\\warning.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   "use strict";
 
@@ -88018,7 +89940,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   module.exports = emptyFunction;
-},563,[],"node_modules\\create-react-context\\node_modules\\fbjs\\lib\\emptyFunction.js");
+},592,[],"node_modules\\create-react-context\\node_modules\\fbjs\\lib\\emptyFunction.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -88052,7 +89974,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   exports.default = createSwitchNavigator;
-},564,[557,565,580],"node_modules\\@react-navigation\\core\\dist\\navigators\\createSwitchNavigator.js");
+},593,[586,594,606],"node_modules\\@react-navigation\\core\\dist\\navigators\\createSwitchNavigator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -88408,7 +90330,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       getScreenOptions: (0, _createConfigGetter2.default)(routeConfigs, config.defaultNavigationOptions)
     };
   };
-},565,[15,549,566,570,552,572,573,574],"node_modules\\@react-navigation\\core\\dist\\routers\\SwitchRouter.js");
+},594,[15,578,595,596,581,598,599,600],"node_modules\\@react-navigation\\core\\dist\\routers\\SwitchRouter.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -88450,333 +90372,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     return routeConfig;
   }
-},566,[567,549],"node_modules\\@react-navigation\\core\\dist\\routers\\getScreenForRouteName.js");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  'use strict';
-
-  if (process.env.NODE_ENV === 'production') {
-    module.exports = _$$_REQUIRE(_dependencyMap[0], "./cjs/react-is.production.min.js");
-  } else {
-    module.exports = _$$_REQUIRE(_dependencyMap[1], "./cjs/react-is.development.js");
-  }
-},567,[568,569],"node_modules\\react-is\\index.js");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  /** @license React v16.6.1
-   * react-is.production.min.js
-   *
-   * Copyright (c) Facebook, Inc. and its affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   */
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: !0
-  });
-  var b = "function" === typeof Symbol && (typeof Symbol === "function" ? Symbol.for : "@@for"),
-      c = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.element") : 60103,
-      d = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.portal") : 60106,
-      e = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.fragment") : 60107,
-      f = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.strict_mode") : 60108,
-      g = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.profiler") : 60114,
-      h = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.provider") : 60109,
-      k = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.context") : 60110,
-      l = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.async_mode") : 60111,
-      m = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.concurrent_mode") : 60111,
-      n = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.forward_ref") : 60112,
-      p = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.suspense") : 60113,
-      r = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.memo") : 60115,
-      t = b ? (typeof Symbol === "function" ? Symbol.for : "@@for")("react.lazy") : 60116;
-
-  function u(a) {
-    if ("object" === typeof a && null !== a) {
-      var q = a.$$typeof;
-
-      switch (q) {
-        case c:
-          switch (a = a.type, a) {
-            case l:
-            case m:
-            case e:
-            case g:
-            case f:
-              return a;
-
-            default:
-              switch (a = a && a.$$typeof, a) {
-                case k:
-                case n:
-                case h:
-                  return a;
-
-                default:
-                  return q;
-              }
-
-          }
-
-        case d:
-          return q;
-      }
-    }
-  }
-
-  function v(a) {
-    return u(a) === m;
-  }
-
-  exports.typeOf = u;
-  exports.AsyncMode = l;
-  exports.ConcurrentMode = m;
-  exports.ContextConsumer = k;
-  exports.ContextProvider = h;
-  exports.Element = c;
-  exports.ForwardRef = n;
-  exports.Fragment = e;
-  exports.Profiler = g;
-  exports.Portal = d;
-  exports.StrictMode = f;
-
-  exports.isValidElementType = function (a) {
-    return "string" === typeof a || "function" === typeof a || a === e || a === m || a === g || a === f || a === p || "object" === typeof a && null !== a && (a.$$typeof === t || a.$$typeof === r || a.$$typeof === h || a.$$typeof === k || a.$$typeof === n);
-  };
-
-  exports.isAsyncMode = function (a) {
-    return v(a) || u(a) === l;
-  };
-
-  exports.isConcurrentMode = v;
-
-  exports.isContextConsumer = function (a) {
-    return u(a) === k;
-  };
-
-  exports.isContextProvider = function (a) {
-    return u(a) === h;
-  };
-
-  exports.isElement = function (a) {
-    return "object" === typeof a && null !== a && a.$$typeof === c;
-  };
-
-  exports.isForwardRef = function (a) {
-    return u(a) === n;
-  };
-
-  exports.isFragment = function (a) {
-    return u(a) === e;
-  };
-
-  exports.isProfiler = function (a) {
-    return u(a) === g;
-  };
-
-  exports.isPortal = function (a) {
-    return u(a) === d;
-  };
-
-  exports.isStrictMode = function (a) {
-    return u(a) === f;
-  };
-},568,[],"node_modules\\react-is\\cjs\\react-is.production.min.js");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  /** @license React v16.6.1
-   * react-is.development.js
-   *
-   * Copyright (c) Facebook, Inc. and its affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   */
-  'use strict';
-
-  if (process.env.NODE_ENV !== "production") {
-    (function () {
-      'use strict';
-
-      Object.defineProperty(exports, '__esModule', {
-        value: true
-      });
-      var hasSymbol = typeof Symbol === 'function' && (typeof Symbol === "function" ? Symbol.for : "@@for");
-      var REACT_ELEMENT_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.element') : 0xeac7;
-      var REACT_PORTAL_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.portal') : 0xeaca;
-      var REACT_FRAGMENT_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.fragment') : 0xeacb;
-      var REACT_STRICT_MODE_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.strict_mode') : 0xeacc;
-      var REACT_PROFILER_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.profiler') : 0xead2;
-      var REACT_PROVIDER_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.provider') : 0xeacd;
-      var REACT_CONTEXT_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.context') : 0xeace;
-      var REACT_ASYNC_MODE_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.async_mode') : 0xeacf;
-      var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.concurrent_mode') : 0xeacf;
-      var REACT_FORWARD_REF_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.forward_ref') : 0xead0;
-      var REACT_SUSPENSE_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.suspense') : 0xead1;
-      var REACT_MEMO_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.memo') : 0xead3;
-      var REACT_LAZY_TYPE = hasSymbol ? (typeof Symbol === "function" ? Symbol.for : "@@for")('react.lazy') : 0xead4;
-
-      function isValidElementType(type) {
-        return typeof type === 'string' || typeof type === 'function' || type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE);
-      }
-
-      var lowPriorityWarning = function lowPriorityWarning() {};
-
-      {
-        var printWarning = function printWarning(format) {
-          for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            args[_key - 1] = arguments[_key];
-          }
-
-          var argIndex = 0;
-          var message = 'Warning: ' + format.replace(/%s/g, function () {
-            return args[argIndex++];
-          });
-
-          if (typeof console !== 'undefined') {
-            console.warn(message);
-          }
-
-          try {
-            throw new Error(message);
-          } catch (x) {}
-        };
-
-        lowPriorityWarning = function lowPriorityWarning(condition, format) {
-          if (format === undefined) {
-            throw new Error('`lowPriorityWarning(condition, format, ...args)` requires a warning ' + 'message argument');
-          }
-
-          if (!condition) {
-            for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-              args[_key2 - 2] = arguments[_key2];
-            }
-
-            printWarning.apply(undefined, [format].concat(args));
-          }
-        };
-      }
-      var lowPriorityWarning$1 = lowPriorityWarning;
-
-      function typeOf(object) {
-        if (typeof object === 'object' && object !== null) {
-          var $$typeof = object.$$typeof;
-
-          switch ($$typeof) {
-            case REACT_ELEMENT_TYPE:
-              var type = object.type;
-
-              switch (type) {
-                case REACT_ASYNC_MODE_TYPE:
-                case REACT_CONCURRENT_MODE_TYPE:
-                case REACT_FRAGMENT_TYPE:
-                case REACT_PROFILER_TYPE:
-                case REACT_STRICT_MODE_TYPE:
-                  return type;
-
-                default:
-                  var $$typeofType = type && type.$$typeof;
-
-                  switch ($$typeofType) {
-                    case REACT_CONTEXT_TYPE:
-                    case REACT_FORWARD_REF_TYPE:
-                    case REACT_PROVIDER_TYPE:
-                      return $$typeofType;
-
-                    default:
-                      return $$typeof;
-                  }
-
-              }
-
-            case REACT_PORTAL_TYPE:
-              return $$typeof;
-          }
-        }
-
-        return undefined;
-      }
-
-      var AsyncMode = REACT_ASYNC_MODE_TYPE;
-      var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
-      var ContextConsumer = REACT_CONTEXT_TYPE;
-      var ContextProvider = REACT_PROVIDER_TYPE;
-      var Element = REACT_ELEMENT_TYPE;
-      var ForwardRef = REACT_FORWARD_REF_TYPE;
-      var Fragment = REACT_FRAGMENT_TYPE;
-      var Profiler = REACT_PROFILER_TYPE;
-      var Portal = REACT_PORTAL_TYPE;
-      var StrictMode = REACT_STRICT_MODE_TYPE;
-      var hasWarnedAboutDeprecatedIsAsyncMode = false;
-
-      function isAsyncMode(object) {
-        {
-          if (!hasWarnedAboutDeprecatedIsAsyncMode) {
-            hasWarnedAboutDeprecatedIsAsyncMode = true;
-            lowPriorityWarning$1(false, 'The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
-          }
-        }
-        return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
-      }
-
-      function isConcurrentMode(object) {
-        return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
-      }
-
-      function isContextConsumer(object) {
-        return typeOf(object) === REACT_CONTEXT_TYPE;
-      }
-
-      function isContextProvider(object) {
-        return typeOf(object) === REACT_PROVIDER_TYPE;
-      }
-
-      function isElement(object) {
-        return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-      }
-
-      function isForwardRef(object) {
-        return typeOf(object) === REACT_FORWARD_REF_TYPE;
-      }
-
-      function isFragment(object) {
-        return typeOf(object) === REACT_FRAGMENT_TYPE;
-      }
-
-      function isProfiler(object) {
-        return typeOf(object) === REACT_PROFILER_TYPE;
-      }
-
-      function isPortal(object) {
-        return typeOf(object) === REACT_PORTAL_TYPE;
-      }
-
-      function isStrictMode(object) {
-        return typeOf(object) === REACT_STRICT_MODE_TYPE;
-      }
-
-      exports.typeOf = typeOf;
-      exports.AsyncMode = AsyncMode;
-      exports.ConcurrentMode = ConcurrentMode;
-      exports.ContextConsumer = ContextConsumer;
-      exports.ContextProvider = ContextProvider;
-      exports.Element = Element;
-      exports.ForwardRef = ForwardRef;
-      exports.Fragment = Fragment;
-      exports.Profiler = Profiler;
-      exports.Portal = Portal;
-      exports.StrictMode = StrictMode;
-      exports.isValidElementType = isValidElementType;
-      exports.isAsyncMode = isAsyncMode;
-      exports.isConcurrentMode = isConcurrentMode;
-      exports.isContextConsumer = isContextConsumer;
-      exports.isContextProvider = isContextProvider;
-      exports.isElement = isElement;
-      exports.isForwardRef = isForwardRef;
-      exports.isFragment = isFragment;
-      exports.isProfiler = isProfiler;
-      exports.isPortal = isPortal;
-      exports.isStrictMode = isStrictMode;
-    })();
-  }
-},569,[],"node_modules\\react-is\\cjs\\react-is.development.js");
+},595,[548,578],"node_modules\\@react-navigation\\core\\dist\\routers\\getScreenForRouteName.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -88850,7 +90446,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return outputConfig;
     };
   };
-},570,[549,566,571],"node_modules\\@react-navigation\\core\\dist\\routers\\createConfigGetter.js");
+},596,[578,595,597],"node_modules\\@react-navigation\\core\\dist\\routers\\createConfigGetter.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -88883,7 +90479,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })), ['}']).join('\n'));
     }
   };
-},571,[15],"node_modules\\@react-navigation\\core\\dist\\routers\\validateScreenOptions.js");
+},597,[15],"node_modules\\@react-navigation\\core\\dist\\routers\\validateScreenOptions.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -88962,7 +90558,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     replace: replace,
     completeTransition: completeTransition
   };
-},572,[],"node_modules\\@react-navigation\\core\\dist\\routers\\StackActions.js");
+},598,[],"node_modules\\@react-navigation\\core\\dist\\routers\\StackActions.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -89008,7 +90604,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   exports.default = validateRouteConfigMap;
-},573,[567,549],"node_modules\\@react-navigation\\core\\dist\\routers\\validateRouteConfigMap.js");
+},599,[548,578],"node_modules\\@react-navigation\\core\\dist\\routers\\validateRouteConfigMap.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -89280,7 +90876,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       getPathAndParamsForRoute: getPathAndParamsForRoute
     };
   };
-},574,[9,575,552,549,577],"node_modules\\@react-navigation\\core\\dist\\routers\\pathUtils.js");
+},600,[9,601,581,578,603],"node_modules\\@react-navigation\\core\\dist\\routers\\pathUtils.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var isarray = _$$_REQUIRE(_dependencyMap[0], "isarray");
 
@@ -89571,12 +91167,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     return stringToRegexp(path, keys, options);
   }
-},575,[576],"node_modules\\path-to-regexp\\index.js");
+},601,[602],"node_modules\\path-to-regexp\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = Array.isArray || function (arr) {
     return Object.prototype.toString.call(arr) == '[object Array]';
   };
-},576,[],"node_modules\\path-to-regexp\\node_modules\\isarray\\index.js");
+},602,[],"node_modules\\path-to-regexp\\node_modules\\isarray\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -89830,7 +91426,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       query: parse(extract(input), options)
     };
   };
-},577,[9,8,578,579],"node_modules\\query-string\\index.js");
+},603,[9,8,604,605],"node_modules\\query-string\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -89839,7 +91435,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return "%" + x.charCodeAt(0).toString(16).toUpperCase();
     });
   };
-},578,[],"node_modules\\strict-uri-encode\\index.js");
+},604,[],"node_modules\\strict-uri-encode\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -89921,7 +91517,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return customDecodeURIComponent(encodedURI);
     }
   };
-},579,[],"node_modules\\decode-uri-component\\index.js");
+},605,[],"node_modules\\decode-uri-component\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -89981,7 +91577,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }(_react2.default.Component);
 
   exports.default = SwitchView;
-},580,[19,20,27,30,33,46,581],"node_modules\\@react-navigation\\core\\dist\\views\\SwitchView\\SwitchView.js");
+},606,[19,20,27,30,33,46,607],"node_modules\\@react-navigation\\core\\dist\\views\\SwitchView\\SwitchView.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -90042,7 +91638,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }(_react2.default.PureComponent);
 
   exports.default = SceneView;
-},581,[19,20,27,30,33,46,558],"node_modules\\@react-navigation\\core\\dist\\views\\SceneView.js");
+},607,[19,20,27,30,33,46,587],"node_modules\\@react-navigation\\core\\dist\\views\\SceneView.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -90589,7 +92185,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       getScreenOptions: (0, _createConfigGetter2.default)(routeConfigs, stackConfig.defaultNavigationOptions)
     };
   };
-},582,[15,552,572,570,566,548,573,549,583,574],"node_modules\\@react-navigation\\core\\dist\\routers\\StackRouter.js");
+},608,[15,581,598,596,595,577,599,578,609,600],"node_modules\\@react-navigation\\core\\dist\\routers\\StackRouter.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   "use strict";
 
@@ -90611,7 +92207,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   exports.generateKey = generateKey;
-},583,[],"node_modules\\@react-navigation\\core\\dist\\routers\\KeyGenerator.js");
+},609,[],"node_modules\\@react-navigation\\core\\dist\\routers\\KeyGenerator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -90655,7 +92251,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var switchRouter = (0, _SwitchRouter2.default)(routeConfigs, config);
     return switchRouter;
   };
-},584,[565,585],"node_modules\\@react-navigation\\core\\dist\\routers\\TabRouter.js");
+},610,[594,611],"node_modules\\@react-navigation\\core\\dist\\routers\\TabRouter.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -90671,7 +92267,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     obj[key] = defaultValue;
     return obj;
   };
-},585,[],"node_modules\\@react-navigation\\core\\dist\\utils\\withDefaultValue.js");
+},611,[],"node_modules\\@react-navigation\\core\\dist\\utils\\withDefaultValue.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   "use strict";
 
@@ -90690,7 +92286,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.default = getActiveChildNavigationOptions;
-},586,[],"node_modules\\@react-navigation\\core\\dist\\utils\\getActiveChildNavigationOptions.js");
+},612,[],"node_modules\\@react-navigation\\core\\dist\\utils\\getActiveChildNavigationOptions.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -90785,7 +92381,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }(_react2.default.Component);
 
   exports.default = (0, _withNavigation2.default)(NavigationEvents);
-},587,[19,20,27,30,33,46,588],"node_modules\\@react-navigation\\core\\dist\\views\\NavigationEvents.js");
+},613,[19,20,27,30,33,46,614],"node_modules\\@react-navigation\\core\\dist\\views\\NavigationEvents.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -90874,89 +92470,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     ComponentWithNavigation.displayName = "withNavigation(" + (Component.displayName || Component.name) + ")";
     return (0, _hoistNonReactStatics2.default)(ComponentWithNavigation, Component);
   }
-},588,[19,20,27,30,33,46,589,549,558],"node_modules\\@react-navigation\\core\\dist\\views\\withNavigation.js");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  'use strict';
-
-  var ReactIs = _$$_REQUIRE(_dependencyMap[0], "react-is");
-
-  var REACT_STATICS = {
-    childContextTypes: true,
-    contextType: true,
-    contextTypes: true,
-    defaultProps: true,
-    displayName: true,
-    getDefaultProps: true,
-    getDerivedStateFromError: true,
-    getDerivedStateFromProps: true,
-    mixins: true,
-    propTypes: true,
-    type: true
-  };
-  var KNOWN_STATICS = {
-    name: true,
-    length: true,
-    prototype: true,
-    caller: true,
-    callee: true,
-    arguments: true,
-    arity: true
-  };
-  var FORWARD_REF_STATICS = {
-    '$$typeof': true,
-    render: true,
-    defaultProps: true,
-    displayName: true,
-    propTypes: true
-  };
-  var TYPE_STATICS = {};
-  TYPE_STATICS[ReactIs.ForwardRef] = FORWARD_REF_STATICS;
-  var defineProperty = Object.defineProperty;
-  var getOwnPropertyNames = Object.getOwnPropertyNames;
-  var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-  var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-  var getPrototypeOf = Object.getPrototypeOf;
-  var objectPrototype = Object.prototype;
-
-  function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
-    if (typeof sourceComponent !== 'string') {
-      if (objectPrototype) {
-        var inheritedComponent = getPrototypeOf(sourceComponent);
-
-        if (inheritedComponent && inheritedComponent !== objectPrototype) {
-          hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
-        }
-      }
-
-      var keys = getOwnPropertyNames(sourceComponent);
-
-      if (getOwnPropertySymbols) {
-        keys = keys.concat(getOwnPropertySymbols(sourceComponent));
-      }
-
-      var targetStatics = TYPE_STATICS[targetComponent['$$typeof']] || REACT_STATICS;
-      var sourceStatics = TYPE_STATICS[sourceComponent['$$typeof']] || REACT_STATICS;
-
-      for (var i = 0; i < keys.length; ++i) {
-        var key = keys[i];
-
-        if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
-          var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
-
-          try {
-            defineProperty(targetComponent, key, descriptor);
-          } catch (e) {}
-        }
-      }
-
-      return targetComponent;
-    }
-
-    return targetComponent;
-  }
-
-  module.exports = hoistNonReactStatics;
-},589,[567],"node_modules\\hoist-non-react-statics\\dist\\hoist-non-react-statics.cjs.js");
+},614,[19,20,27,30,33,46,547,578,587],"node_modules\\@react-navigation\\core\\dist\\views\\withNavigation.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -91068,7 +92582,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     ComponentWithNavigationFocus.displayName = "withNavigationFocus(" + (Component.displayName || Component.name) + ")";
     return (0, _hoistNonReactStatics2.default)((0, _withNavigation2.default)(ComponentWithNavigationFocus), Component);
   }
-},590,[19,20,27,30,33,46,589,549,588],"node_modules\\@react-navigation\\core\\dist\\views\\withNavigationFocus.js");
+},615,[19,20,27,30,33,46,547,578,614],"node_modules\\@react-navigation\\core\\dist\\views\\withNavigationFocus.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var validateFormat = function validateFormat() {};
 
@@ -91103,7 +92617,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   module.exports = invariant;
-},591,[],"node_modules\\@react-navigation\\native\\src\\utils\\invariant.js");
+},616,[],"node_modules\\@react-navigation\\native\\src\\utils\\invariant.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -91113,7 +92627,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   function docsUrl(path) {
     return "https://reactnavigation.org/docs/" + path;
   }
-},592,[],"node_modules\\@react-navigation\\native\\src\\utils\\docsUrl.js");
+},617,[],"node_modules\\@react-navigation\\native\\src\\utils\\docsUrl.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -91240,7 +92754,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.default = _default2;
-},593,[1,8,19,20,27,30,33,46,184,2],"node_modules\\@react-navigation\\native\\src\\createKeyboardAwareNavigator.js");
+},618,[1,8,19,20,27,30,33,46,184,2],"node_modules\\@react-navigation\\native\\src\\createKeyboardAwareNavigator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -91456,7 +92970,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     NavigationAwareScrollable = _wrapComponent("NavigationAwareScrollable")(NavigationAwareScrollable);
     return (0, _hoistNonReactStatics.default)(NavigationAwareScrollable, Component);
   }
-},594,[1,8,19,20,27,30,33,46,184,589,547],"node_modules\\@react-navigation\\native\\src\\createNavigationAwareScrollable.js");
+},619,[1,8,19,20,27,30,33,46,184,547,576],"node_modules\\@react-navigation\\native\\src\\createNavigationAwareScrollable.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -91569,7 +93083,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     withOrientation = _wrapComponent("withOrientation")(withOrientation);
     return (0, _hoistNonReactStatics.default)(withOrientation, WrappedComponent);
   }
-},595,[1,8,19,20,27,30,33,46,184,2,589],"node_modules\\@react-navigation\\native\\src\\withOrientation.js");
+},620,[1,8,19,20,27,30,33,46,184,2,547],"node_modules\\@react-navigation\\native\\src\\withOrientation.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -91709,7 +93223,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default2 = (0, _reactLifecyclesCompat.polyfill)(ResourceSavingSceneView);
 
   exports.default = _default2;
-},596,[1,8,6,19,27,30,20,33,46,184,2,546,547],"node_modules\\@react-navigation\\native\\src\\ResourceSavingSceneView.js");
+},621,[1,8,6,19,27,30,20,33,46,184,2,575,576],"node_modules\\@react-navigation\\native\\src\\ResourceSavingSceneView.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -92180,7 +93694,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.withSafeArea = withSafeArea;
-},597,[1,541,8,6,43,19,20,27,30,33,46,184,2,598,599],"node_modules\\react-native-safe-area-view\\index.js");
+},622,[1,541,8,6,43,19,20,27,30,33,46,184,2,623,624],"node_modules\\react-native-safe-area-view\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -92246,7 +93760,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   module.exports = hoistNonReactStatics;
-},598,[],"node_modules\\react-native-safe-area-view\\node_modules\\hoist-non-react-statics\\dist\\hoist-non-react-statics.cjs.js");
+},623,[],"node_modules\\react-native-safe-area-view\\node_modules\\hoist-non-react-statics\\dist\\hoist-non-react-statics.cjs.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -92365,7 +93879,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     withOrientation = _wrapComponent("withOrientation")(withOrientation);
     return (0, _hoistNonReactStatics.default)(withOrientation, WrappedComponent);
   }
-},599,[1,541,8,19,20,27,30,33,46,184,2,598],"node_modules\\react-native-safe-area-view\\withOrientation.js");
+},624,[1,541,8,19,20,27,30,33,46,184,2,623],"node_modules\\react-native-safe-area-view\\withOrientation.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -92425,7 +93939,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     FlatList: WrappedFlatList,
     SectionList: WrappedSectionList
   };
-},600,[1,8,46,2,601,594],"node_modules\\@react-navigation\\native\\src\\Scrollables.js");
+},625,[1,8,46,2,626,619],"node_modules\\@react-navigation\\native\\src\\Scrollables.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -92465,7 +93979,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }
     });
   });
-},601,[1,602,607,603],"node_modules\\react-native-gesture-handler\\index.js");
+},626,[1,627,632,628],"node_modules\\react-native-gesture-handler\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -92886,7 +94400,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flexDirection: 'row-reverse'
     })
   });
-},602,[1,541,8,43,19,20,27,30,33,46,184,2,374,603],"node_modules\\react-native-gesture-handler\\Swipeable.js");
+},627,[1,541,8,43,19,20,27,30,33,46,184,2,374,628],"node_modules\\react-native-gesture-handler\\Swipeable.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -93844,7 +95358,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.FlatList = FlatListWithGHScroll;
-},603,[1,6,8,19,20,27,30,33,44,43,46,184,2,71,353,604,63,605],"node_modules\\react-native-gesture-handler\\GestureHandler.js");
+},628,[1,6,8,19,20,27,30,33,44,43,46,184,2,71,353,629,63,630],"node_modules\\react-native-gesture-handler\\GestureHandler.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   "use strict";
 
@@ -93957,7 +95471,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   module.exports = areEqual;
-},604,[],"node_modules\\fbjs\\lib\\areEqual.js");
+},629,[],"node_modules\\fbjs\\lib\\areEqual.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -94056,7 +95570,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1
     }
   });
-},605,[1,8,19,20,27,30,33,43,46,184,2,606],"node_modules\\react-native-gesture-handler\\gestureHandlerRootHOC.android.js");
+},630,[1,8,19,20,27,30,33,43,46,184,2,631],"node_modules\\react-native-gesture-handler\\gestureHandlerRootHOC.android.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -94122,7 +95636,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   module.exports = hoistNonReactStatics;
-},606,[],"node_modules\\react-native-gesture-handler\\node_modules\\hoist-non-react-statics\\dist\\hoist-non-react-statics.cjs.js");
+},631,[],"node_modules\\react-native-gesture-handler\\node_modules\\hoist-non-react-statics\\dist\\hoist-non-react-statics.cjs.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -94615,38 +96129,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       zIndex: 1000
     })
   });
-},607,[1,541,43,19,20,27,30,33,46,184,608,2,374,601],"node_modules\\react-native-gesture-handler\\DrawerLayout.js");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  'use strict';
-
-  var invariant = function invariant(condition, format, a, b, c, d, e, f) {
-    if (process.env.NODE_ENV !== 'production') {
-      if (format === undefined) {
-        throw new Error('invariant requires an error message argument');
-      }
-    }
-
-    if (!condition) {
-      var error;
-
-      if (format === undefined) {
-        error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-      } else {
-        var args = [a, b, c, d, e, f];
-        var argIndex = 0;
-        error = new Error(format.replace(/%s/g, function () {
-          return args[argIndex++];
-        }));
-        error.name = 'Invariant Violation';
-      }
-
-      error.framesToPop = 1;
-      throw error;
-    }
-  };
-
-  module.exports = invariant;
-},608,[],"node_modules\\invariant\\browser.js");
+},632,[1,541,43,19,20,27,30,33,46,184,551,2,374,626],"node_modules\\react-native-gesture-handler\\DrawerLayout.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
 
@@ -94715,7 +96198,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
 
   };
-},609,[2,610,622,626,617,619,618,624,611,614,612,628,627,615,632,633,630],"node_modules\\react-navigation-stack\\src\\index.js");
+},633,[2,634,646,650,641,643,642,648,635,638,636,652,651,639,656,657,654],"node_modules\\react-navigation-stack\\src\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -94744,7 +96227,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = createStackNavigator;
   exports.default = _default;
-},610,[1,547,544,611],"node_modules\\react-navigation-stack\\src\\navigators\\createStackNavigator.js");
+},634,[1,576,573,635],"node_modules\\react-navigation-stack\\src\\navigators\\createStackNavigator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -94916,7 +96399,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   StackView = _wrapComponent("StackView")(StackView);
   var _default2 = StackView;
   exports.default = _default2;
-},611,[1,8,43,19,20,27,30,33,46,184,547,612,632,627],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackView.js");
+},635,[1,8,43,19,20,27,30,33,46,184,576,636,656,651],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackView.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -95791,7 +97274,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default2 = (0, _native.withOrientation)(StackViewLayout);
 
   exports.default = _default2;
-},612,[1,6,8,43,19,20,27,30,33,46,184,2,547,544,613,601,614,617,627,624,630,631,629],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackViewLayout.js");
+},636,[1,6,8,43,19,20,27,30,33,46,184,2,576,573,637,626,638,641,651,648,654,655,653],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackViewLayout.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -95977,7 +97460,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   exports.ScreenContainer = ScreenContainer;
   exports.ScreenContainer = ScreenContainer = _wrapComponent("ScreenContainer")(ScreenContainer);
-},613,[1,8,6,19,20,27,30,33,46,184,2],"node_modules\\react-native-screens\\src\\screens.native.js");
+},637,[1,8,6,19,20,27,30,33,46,184,2],"node_modules\\react-native-screens\\src\\screens.native.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -96154,7 +97637,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default2 = (0, _createPointerEventsContainer.default)(Card);
 
   exports.default = _default2;
-},614,[1,43,8,6,19,20,27,30,33,46,184,2,613,615],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackViewCard.js");
+},638,[1,43,8,6,19,20,27,30,33,46,184,2,637,639],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackViewCard.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -96309,7 +97792,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }]);
     return AnimatedValueSubscription;
   }();
-},615,[1,8,19,20,27,30,33,46,184,616],"node_modules\\react-navigation-stack\\src\\views\\StackView\\createPointerEventsContainer.js");
+},639,[1,8,19,20,27,30,33,46,184,640],"node_modules\\react-navigation-stack\\src\\views\\StackView\\createPointerEventsContainer.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -96341,7 +97824,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       throw error;
     }
   }
-},616,[],"node_modules\\react-navigation-stack\\src\\utils\\invariant.js");
+},640,[],"node_modules\\react-navigation-stack\\src\\utils\\invariant.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -97081,7 +98564,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default2 = (0, _native.withOrientation)(Header);
 
   exports.default = _default2;
-},617,[1,6,8,44,43,19,20,27,30,33,46,184,2,544,618,619,623,624,626],"node_modules\\react-navigation-stack\\src\\views\\Header\\Header.js");
+},641,[1,6,8,44,43,19,20,27,30,33,46,184,2,573,642,643,647,648,650],"node_modules\\react-navigation-stack\\src\\views\\Header\\Header.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -97128,7 +98611,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = HeaderTitle;
   exports.default = _default;
-},618,[1,8,6,46,2],"node_modules\\react-navigation-stack\\src\\views\\Header\\HeaderTitle.js");
+},642,[1,8,6,46,2],"node_modules\\react-navigation-stack\\src\\views\\Header\\HeaderTitle.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -97391,7 +98874,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default2 = HeaderBackButton;
   exports.default = _default2;
-},619,[1,8,19,20,27,30,33,46,184,2,620,622],"node_modules\\react-navigation-stack\\src\\views\\Header\\HeaderBackButton.js");
+},643,[1,8,19,20,27,30,33,46,184,2,644,646],"node_modules\\react-navigation-stack\\src\\views\\Header\\HeaderBackButton.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -97509,7 +98992,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default2 = TouchableItem;
   exports.default = _default2;
-},620,[1,8,6,19,20,27,30,33,46,184,2,621],"node_modules\\react-navigation-stack\\src\\views\\TouchableItem.js");
+},644,[1,8,6,19,20,27,30,33,46,184,2,645],"node_modules\\react-navigation-stack\\src\\views\\TouchableItem.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -97628,7 +99111,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default2 = BorderlessButton;
   exports.default = _default2;
-},621,[1,43,8,6,19,20,27,30,33,46,184,63,2,601],"node_modules\\react-navigation-stack\\src\\views\\BorderlessButton.js");
+},645,[1,43,8,6,19,20,27,30,33,46,184,63,2,626],"node_modules\\react-navigation-stack\\src\\views\\BorderlessButton.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = _$$_REQUIRE(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
     "__packager_asset": true,
@@ -97640,7 +99123,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     "name": "back-icon",
     "type": "png"
   });
-},622,[179],"node_modules\\react-navigation-stack\\src\\views\\assets\\back-icon.png");
+},646,[179],"node_modules\\react-navigation-stack\\src\\views\\assets\\back-icon.png");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -97879,7 +99362,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default2 = ModularHeaderBackButton;
   exports.default = _default2;
-},623,[1,8,19,20,27,30,33,46,184,2,620,622],"node_modules\\react-navigation-stack\\src\\views\\Header\\ModularHeaderBackButton.js");
+},647,[1,8,19,20,27,30,33,46,184,2,644,646],"node_modules\\react-navigation-stack\\src\\views\\Header\\ModularHeaderBackButton.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -98154,7 +99637,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     forBackgroundWithTranslation: forBackgroundWithTranslation
   };
   exports.default = _default;
-},624,[1,2,625],"node_modules\\react-navigation-stack\\src\\views\\Header\\HeaderStyleInterpolator.js");
+},648,[1,2,649],"node_modules\\react-navigation-stack\\src\\views\\Header\\HeaderStyleInterpolator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -98206,7 +99689,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = getSceneIndicesForInterpolationInputRange;
   exports.default = _default;
-},625,[],"node_modules\\react-navigation-stack\\src\\utils\\getSceneIndicesForInterpolationInputRange.js");
+},649,[],"node_modules\\react-navigation-stack\\src\\utils\\getSceneIndicesForInterpolationInputRange.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = _$$_REQUIRE(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
     "__packager_asset": true,
@@ -98218,7 +99701,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     "name": "back-icon-mask",
     "type": "png"
   });
-},626,[179],"node_modules\\react-navigation-stack\\src\\views\\assets\\back-icon-mask.png");
+},650,[179],"node_modules\\react-navigation-stack\\src\\views\\assets\\back-icon-mask.png");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -98321,7 +99804,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     FadeOutToBottomAndroid: FadeOutToBottomAndroid
   };
   exports.default = _default;
-},627,[1,43,2,628,629],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackViewTransitionConfigs.js");
+},651,[1,43,2,652,653],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackViewTransitionConfigs.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -98529,7 +100012,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     forFade: forFade
   };
   exports.default = _default;
-},628,[1,2,625],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackViewStyleInterpolator.js");
+},652,[1,2,649],"node_modules\\react-navigation-stack\\src\\views\\StackView\\StackViewStyleInterpolator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -98552,7 +100035,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.supportsImprovedSpringAnimation = supportsImprovedSpringAnimation;
-},629,[2],"node_modules\\react-navigation-stack\\src\\utils\\ReactNativeFeatures.js");
+},653,[2],"node_modules\\react-navigation-stack\\src\\utils\\ReactNativeFeatures.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -98566,7 +100049,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default = _react.default.createContext(null);
 
   exports.default = _default;
-},630,[1,46],"node_modules\\react-navigation-stack\\src\\utils\\StackGestureContext.js");
+},654,[1,46],"node_modules\\react-navigation-stack\\src\\utils\\StackGestureContext.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -98584,7 +100067,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     return value;
   }
-},631,[],"node_modules\\react-navigation-stack\\src\\utils\\clamp.js");
+},655,[],"node_modules\\react-navigation-stack\\src\\utils\\clamp.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -98968,7 +100451,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default2 = Transitioner;
   exports.default = _default2;
-},632,[1,95,43,19,20,27,30,33,46,184,2,616,633],"node_modules\\react-navigation-stack\\src\\views\\Transitioner.js");
+},656,[1,95,43,19,20,27,30,33,46,184,2,640,657],"node_modules\\react-navigation-stack\\src\\views\\Transitioner.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -99158,7 +100641,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     return scenes;
   }
-},633,[1,43,616,634],"node_modules\\react-navigation-stack\\src\\views\\ScenesReducer.js");
+},657,[1,43,640,658],"node_modules\\react-navigation-stack\\src\\views\\ScenesReducer.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -99201,7 +100684,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = shallowEqual;
   exports.default = _default;
-},634,[],"node_modules\\react-navigation-stack\\src\\utils\\shallowEqual.js");
+},658,[],"node_modules\\react-navigation-stack\\src\\utils\\shallowEqual.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = {
     get createBottomTabNavigator() {
@@ -99225,7 +100708,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
 
   };
-},635,[636,643,638,655,637],"node_modules\\react-navigation-tabs\\src\\index.js");
+},659,[660,667,662,679,661],"node_modules\\react-navigation-tabs\\src\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -99433,7 +100916,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default2 = (0, _createTabNavigator.default)(TabNavigationView);
 
   exports.default = _default2;
-},636,[1,541,15,8,19,20,27,30,33,46,184,2,546,613,637,638,642],"node_modules\\react-navigation-tabs\\src\\navigators\\createBottomTabNavigator.js");
+},660,[1,541,15,8,19,20,27,30,33,46,184,2,575,637,661,662,666],"node_modules\\react-navigation-tabs\\src\\navigators\\createBottomTabNavigator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -99735,7 +101218,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return (0, _core.createNavigator)(NavigationView, router, config);
     };
   }
-},637,[1,541,8,43,19,20,27,30,33,46,184,547],"node_modules\\react-navigation-tabs\\src\\utils\\createTabNavigator.js");
+},661,[1,541,8,43,19,20,27,30,33,46,184,576],"node_modules\\react-navigation-tabs\\src\\utils\\createTabNavigator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -100114,7 +101597,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default2 = (0, _withDimensions.default)(TabBarBottom);
 
   exports.default = _default2;
-},638,[1,8,6,19,20,27,30,33,46,184,2,544,639,640],"node_modules\\react-navigation-tabs\\src\\views\\BottomTabBar.js");
+},662,[1,8,6,19,20,27,30,33,46,184,2,573,663,664],"node_modules\\react-navigation-tabs\\src\\views\\BottomTabBar.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -100231,7 +101714,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       minWidth: 25
     }
   });
-},639,[1,19,20,27,30,33,46,184,2],"node_modules\\react-navigation-tabs\\src\\views\\CrossFadeIcon.js");
+},663,[1,19,20,27,30,33,46,184,2],"node_modules\\react-navigation-tabs\\src\\views\\CrossFadeIcon.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -100363,7 +101846,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     EnhancedComponent = _wrapComponent("EnhancedComponent")(EnhancedComponent);
     return (0, _hoistNonReactStatics.default)(EnhancedComponent, WrappedComponent);
   }
-},640,[1,541,8,19,20,27,30,33,46,184,2,641],"node_modules\\react-navigation-tabs\\src\\utils\\withDimensions.js");
+},664,[1,541,8,19,20,27,30,33,46,184,2,665],"node_modules\\react-navigation-tabs\\src\\utils\\withDimensions.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -100429,7 +101912,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 
   module.exports = hoistNonReactStatics;
-},641,[],"node_modules\\react-navigation-tabs\\node_modules\\hoist-non-react-statics\\dist\\hoist-non-react-statics.cjs.js");
+},665,[],"node_modules\\react-navigation-tabs\\node_modules\\hoist-non-react-statics\\dist\\hoist-non-react-statics.cjs.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -100553,7 +102036,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       top: FAR_FAR_AWAY
     }
   });
-},642,[1,541,8,6,19,20,27,30,33,46,184,2,613],"node_modules\\react-navigation-tabs\\src\\views\\ResourceSavingScene.js");
+},666,[1,541,8,6,19,20,27,30,33,46,184,2,637],"node_modules\\react-navigation-tabs\\src\\views\\ResourceSavingScene.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -100892,7 +102375,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default2 = (0, _createTabNavigator.default)(MaterialTabView);
 
   exports.default = _default2;
-},643,[1,541,6,15,8,19,20,27,30,33,46,184,2,546,644,637,655,642],"node_modules\\react-navigation-tabs\\src\\navigators\\createMaterialTopTabNavigator.js");
+},667,[1,541,6,15,8,19,20,27,30,33,46,184,2,575,668,661,679,666],"node_modules\\react-navigation-tabs\\src\\navigators\\createMaterialTopTabNavigator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -100963,7 +102446,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _PagerExperimental = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "./PagerExperimental"));
 
   var _SceneMap = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "./SceneMap"));
-},644,[1,645,646,649,652,651,650,653,654],"node_modules\\react-native-tab-view\\src\\index.js");
+},668,[1,669,670,673,676,675,674,677,678],"node_modules\\react-native-tab-view\\src\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -101259,7 +102742,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1
     }
   });
-},645,[1,541,8,6,43,19,20,27,30,33,46,184,63,2,646,649,648],"node_modules\\react-native-tab-view\\src\\TabView.js");
+},669,[1,541,8,6,43,19,20,27,30,33,46,184,63,2,670,673,672],"node_modules\\react-native-tab-view\\src\\TabView.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -101877,7 +103360,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       height: 2
     }
   });
-},646,[1,541,43,15,19,20,27,30,33,46,184,63,2,647,648],"node_modules\\react-native-tab-view\\src\\TabBar.js");
+},670,[1,541,43,15,19,20,27,30,33,46,184,63,2,671,672],"node_modules\\react-native-tab-view\\src\\TabBar.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -101993,7 +103476,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default2 = TouchableItem;
   exports.default = _default2;
-},647,[1,541,8,6,19,20,27,30,33,46,184,63,2],"node_modules\\react-native-tab-view\\src\\TouchableItem.js");
+},671,[1,541,8,6,19,20,27,30,33,46,184,63,2],"node_modules\\react-native-tab-view\\src\\TouchableItem.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -102053,7 +103536,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     children: _propTypes.default.node.isRequired
   };
   exports.PagerRendererPropType = PagerRendererPropType;
-},648,[1,63,2],"node_modules\\react-native-tab-view\\src\\PropTypes.js");
+},672,[1,63,2],"node_modules\\react-native-tab-view\\src\\PropTypes.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -102080,7 +103563,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = Pager;
   exports.default = _default;
-},649,[2,650,651,652],"node_modules\\react-native-tab-view\\src\\PagerDefault.js");
+},673,[2,674,675,676],"node_modules\\react-native-tab-view\\src\\PagerDefault.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -102293,7 +103776,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       overflow: 'hidden'
     }
   });
-},650,[1,541,19,20,27,30,33,46,184,2,648],"node_modules\\react-native-tab-view\\src\\PagerAndroid.js");
+},674,[1,541,19,20,27,30,33,46,184,2,672],"node_modules\\react-native-tab-view\\src\\PagerAndroid.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -102525,7 +104008,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       overflow: 'hidden'
     }
   });
-},651,[1,541,19,20,27,30,33,46,184,2,648],"node_modules\\react-native-tab-view\\src\\PagerScroll.js");
+},675,[1,541,19,20,27,30,33,46,184,2,672],"node_modules\\react-native-tab-view\\src\\PagerScroll.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -102808,7 +104291,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'stretch'
     }
   });
-},652,[1,541,8,43,6,19,20,27,30,33,46,184,63,2,648],"node_modules\\react-native-tab-view\\src\\PagerPan.js");
+},676,[1,541,8,43,6,19,20,27,30,33,46,184,63,2,672],"node_modules\\react-native-tab-view\\src\\PagerPan.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -103063,7 +104546,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'stretch'
     }
   });
-},653,[1,541,43,6,19,20,27,30,33,46,184,63,2,648],"node_modules\\react-native-tab-view\\src\\PagerExperimental.js");
+},677,[1,541,43,6,19,20,27,30,33,46,184,63,2,672],"node_modules\\react-native-tab-view\\src\\PagerExperimental.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -103148,7 +104631,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       });
     };
   }
-},654,[1,541,6,19,20,27,30,33,46,184],"node_modules\\react-native-tab-view\\src\\SceneMap.js");
+},678,[1,541,6,19,20,27,30,33,46,184],"node_modules\\react-native-tab-view\\src\\SceneMap.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -103376,7 +104859,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       backgroundColor: 'transparent'
     }
   });
-},655,[1,541,8,6,15,19,20,27,30,33,46,184,2,644,639],"node_modules\\react-navigation-tabs\\src\\views\\MaterialTopTabBar.js");
+},679,[1,541,8,6,15,19,20,27,30,33,46,184,2,668,663],"node_modules\\react-navigation-tabs\\src\\views\\MaterialTopTabBar.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = {
     get createDrawerNavigator() {
@@ -103408,7 +104891,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
 
   };
-},656,[657,658,659,666,663,660,664],"node_modules\\react-navigation-drawer\\dist\\index.js");
+},680,[681,682,683,690,687,684,688],"node_modules\\react-navigation-drawer\\dist\\index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -103495,7 +104978,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = DrawerNavigator;
   exports.default = _default;
-},657,[1,43,8,46,2,547,544,658,660,666],"node_modules\\react-navigation-drawer\\dist\\navigators\\createDrawerNavigator.js");
+},681,[1,43,8,46,2,576,573,682,684,690],"node_modules\\react-navigation-drawer\\dist\\navigators\\createDrawerNavigator.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -103660,7 +105143,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.default = _default;
-},658,[1,43,547,659],"node_modules\\react-navigation-drawer\\dist\\routers\\DrawerRouter.js");
+},682,[1,43,576,683],"node_modules\\react-navigation-drawer\\dist\\routers\\DrawerRouter.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -103733,7 +105216,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     markDrawerSettling: markDrawerSettling
   };
   exports.default = _default;
-},659,[1,43],"node_modules\\react-navigation-drawer\\dist\\routers\\DrawerActions.js");
+},683,[1,43],"node_modules\\react-navigation-drawer\\dist\\routers\\DrawerActions.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -104058,7 +105541,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1
     }
   });
-},660,[1,15,8,19,20,27,30,33,46,184,2,547,613,659,661,663,664,665],"node_modules\\react-navigation-drawer\\dist\\views\\DrawerView.js");
+},684,[1,15,8,19,20,27,30,33,46,184,2,576,637,683,685,687,688,689],"node_modules\\react-navigation-drawer\\dist\\views\\DrawerView.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -104526,7 +106009,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       zIndex: 1000
     })
   });
-},661,[1,541,43,19,20,27,30,33,46,184,2,662,601],"node_modules\\react-navigation-drawer\\dist\\views\\DrawerLayout.js");
+},685,[1,541,43,19,20,27,30,33,46,184,2,686,626],"node_modules\\react-navigation-drawer\\dist\\views\\DrawerLayout.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -104558,7 +106041,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       throw error;
     }
   }
-},662,[],"node_modules\\react-navigation-drawer\\dist\\utils\\invariant.js");
+},686,[],"node_modules\\react-navigation-drawer\\dist\\utils\\invariant.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -104734,7 +106217,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1
     }
   });
-},663,[1,8,19,20,27,30,33,46,184,2,547,662],"node_modules\\react-navigation-drawer\\dist\\views\\DrawerSidebar.js");
+},687,[1,8,19,20,27,30,33,46,184,2,576,686],"node_modules\\react-navigation-drawer\\dist\\views\\DrawerSidebar.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -104748,7 +106231,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default = _react.default.createContext(null);
 
   exports.default = _default;
-},664,[1,46],"node_modules\\react-navigation-drawer\\dist\\utils\\DrawerGestureContext.js");
+},688,[1,46],"node_modules\\react-navigation-drawer\\dist\\utils\\DrawerGestureContext.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -104872,7 +106355,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       top: FAR_FAR_AWAY
     }
   });
-},665,[1,541,8,6,19,20,27,30,33,46,184,2,613],"node_modules\\react-navigation-drawer\\dist\\views\\ResourceSavingScene.js");
+},689,[1,541,8,6,19,20,27,30,33,46,184,2,637],"node_modules\\react-navigation-drawer\\dist\\views\\ResourceSavingScene.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -105011,7 +106494,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = DrawerNavigatorItems;
   exports.default = _default;
-},666,[1,44,46,2,544,667],"node_modules\\react-navigation-drawer\\dist\\views\\DrawerNavigatorItems.js");
+},690,[1,44,46,2,573,691],"node_modules\\react-navigation-drawer\\dist\\views\\DrawerNavigatorItems.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -105112,7 +106595,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default2 = TouchableItem;
   exports.default = _default2;
-},667,[1,8,6,19,20,27,30,33,46,184,2],"node_modules\\react-navigation-drawer\\dist\\views\\TouchableItem.js");
+},691,[1,8,6,19,20,27,30,33,46,184,2],"node_modules\\react-navigation-drawer\\dist\\views\\TouchableItem.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireWildcard");
 
@@ -105142,7 +106625,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.AboutScreen = AboutScreen;
-},668,[541,46,2],"src\\screens\\AboutScreen\\AboutScreen.tsx");
+},692,[541,46,2],"src\\screens\\AboutScreen\\AboutScreen.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -105153,7 +106636,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = _HomeScreen.HomeScreen;
   exports.default = _default;
-},669,[670],"src\\screens\\HomeScreen\\index.ts");
+},693,[694],"src\\screens\\HomeScreen\\index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireWildcard");
 
@@ -105168,13 +106651,15 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _reactNative = _$$_REQUIRE(_dependencyMap[3], "react-native");
 
-  var _HomeScreenStyles = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "./HomeScreenStyles"));
+  var _index = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../components/todo/index"));
+
+  var _HomeScreenStyles = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "./HomeScreenStyles"));
 
   var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\screens\\HomeScreen\\HomeScreen.tsx";
 
   var instructions = _reactNative.Platform.select({
-    android: "Double tap R on your keyboard to reload,\n    Shake or press menu button for dev menu",
-    ios: "Press Cmd+R to reload, Cmd+D or shake for dev menu"
+    android: "Android",
+    ios: "iOS"
   });
 
   var HomeScreen = function HomeScreen() {
@@ -105182,25 +106667,289 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       style: _HomeScreenStyles.default.container,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 13
+        lineNumber: 12
       }
     }, React.createElement(_reactNative.Text, {
       style: _HomeScreenStyles.default.instructions,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 14
+        lineNumber: 13
       }
     }, "Home screen"), React.createElement(_reactNative.Text, {
       style: _HomeScreenStyles.default.instructions,
       __source: {
         fileName: _jsxFileName,
+        lineNumber: 14
+      }
+    }, instructions), React.createElement(_index.default, {
+      __source: {
+        fileName: _jsxFileName,
         lineNumber: 15
       }
-    }, instructions));
+    }));
   };
 
   exports.HomeScreen = HomeScreen;
-},670,[541,1,46,2,671],"src\\screens\\HomeScreen\\HomeScreen.tsx");
+},694,[541,1,46,2,695,707],"src\\screens\\HomeScreen\\HomeScreen.tsx");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function get() {
+      return _TodoContainer.default;
+    }
+  });
+
+  var _TodoContainer = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "./TodoContainer"));
+},695,[1,696],"src\\components\\todo\\index.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = exports.mapStateToProps = void 0;
+
+  var _reactRedux = _$$_REQUIRE(_dependencyMap[0], "react-redux");
+
+  var _Todo = _$$_REQUIRE(_dependencyMap[1], "./Todo");
+
+  var _TodoActions = _$$_REQUIRE(_dependencyMap[2], "./TodoActions");
+
+  var _TodoSelectors = _$$_REQUIRE(_dependencyMap[3], "./TodoSelectors");
+
+  var mapStateToProps = function mapStateToProps(state) {
+    return {
+      todos: (0, _TodoSelectors.getTodos)(state)
+    };
+  };
+
+  exports.mapStateToProps = mapStateToProps;
+
+  var _default = (0, _reactRedux.connect)(mapStateToProps, {
+    addTodoItem: _TodoActions.addTodoItem,
+    toggleTodoItem: _TodoActions.toggleTodoItem,
+    deleteTodoItem: _TodoActions.deleteTodoItem
+  })(_Todo.Todo);
+
+  exports.default = _default;
+},696,[542,697,703,706],"src\\components\\todo\\TodoContainer.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/interopRequireWildcard");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = exports.Todo = void 0;
+
+  var _classCallCheck2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/classCallCheck"));
+
+  var _createClass2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "@babel/runtime/helpers/createClass"));
+
+  var _possibleConstructorReturn2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "@babel/runtime/helpers/possibleConstructorReturn"));
+
+  var _getPrototypeOf2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "@babel/runtime/helpers/getPrototypeOf"));
+
+  var _inherits2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "@babel/runtime/helpers/inherits"));
+
+  var _react = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[7], "react"));
+
+  var _index = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "./../../../node_modules/react-transform-hmr/lib/index.js"));
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[9], "react-native");
+
+  var _TodoItem = _$$_REQUIRE(_dependencyMap[10], "./todoItem/TodoItem");
+
+  var _TodoStyle = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[11], "./TodoStyle"));
+
+  var _createToDo = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[12], "./createToDo"));
+
+  var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\components\\todo\\Todo.tsx";
+  var _components = {
+    Todo: {
+      displayName: "Todo"
+    }
+  };
+
+  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index.default)({
+    filename: "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\components\\todo\\Todo.tsx",
+    components: _components,
+    locals: [module],
+    imports: [_react.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var Todo = function (_Component) {
+    (0, _inherits2.default)(Todo, _Component);
+
+    function Todo(props) {
+      var _this;
+
+      (0, _classCallCheck2.default)(this, Todo);
+      _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Todo).call(this, props));
+
+      _this.renderTodos = function (todos) {
+        return _react.default.createElement(_reactNative.ScrollView, {
+          contentContainerStyle: _TodoStyle.default.scrollViewStyle,
+          style: _TodoStyle.default.todoContainer,
+          ref: _this.scrollView,
+          onContentSizeChange: _this.scrollToBottom,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 37
+          }
+        }, todos.map(function (todoItem) {
+          return _react.default.createElement(_TodoItem.TodoItem, {
+            key: todoItem.id,
+            todo: todoItem,
+            toggleTodo: _this.toggleTodo,
+            deleteTodo: _this.deleteTodo,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 43
+            }
+          });
+        }));
+      };
+
+      _this.toggleTodo = function (todo) {
+        return _this.props.toggleTodoItem(todo);
+      };
+
+      _this.deleteTodo = function (id) {
+        return _this.props.deleteTodoItem(id);
+      };
+
+      _this.scrollToBottom = function () {
+        if (_this.scrollView.current) {
+          _this.scrollView.current.scrollToEnd();
+        }
+      };
+
+      _this.scrollView = _react.default.createRef();
+      return _this;
+    }
+
+    (0, _createClass2.default)(Todo, [{
+      key: "render",
+      value: function render() {
+        var todos = this.props.todos;
+        return _react.default.createElement(_reactNative.View, {
+          style: _TodoStyle.default.container,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 28
+          }
+        }, _react.default.createElement(_reactNative.Text, {
+          style: _TodoStyle.default.title,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 29
+          }
+        }, "Todos"), this.renderTodos(todos), _react.default.createElement(_createToDo.default, {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 31
+          }
+        }));
+      }
+    }]);
+    return Todo;
+  }(_react.Component);
+
+  exports.Todo = Todo;
+  exports.Todo = Todo = _wrapComponent("Todo")(Todo);
+  var _default2 = Todo;
+  exports.default = _default2;
+},697,[1,541,19,20,27,30,33,46,184,2,698,700,701],"src\\components\\todo\\Todo.tsx");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.TodoItem = void 0;
+
+  var _react = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "react"));
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
+
+  var _TodoItemStyle = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./TodoItemStyle"));
+
+  var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\components\\todo\\todoItem\\TodoItem.tsx";
+
+  var TodoItem = function TodoItem(props) {
+    var strikeOutStyle = props.todo.finished ? _TodoItemStyle.default.strikeout : null;
+    return _react.default.createElement(_reactNative.TouchableOpacity, {
+      style: _TodoItemStyle.default.container,
+      onPress: function onPress(_) {
+        return props.toggleTodo(props.todo);
+      },
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 15
+      }
+    }, _react.default.createElement(_reactNative.Text, {
+      style: [_TodoItemStyle.default.text, strikeOutStyle],
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 16
+      }
+    }, props.todo.name), _react.default.createElement(_reactNative.Button, {
+      title: "Delete",
+      onPress: function onPress() {
+        return props.deleteTodo(props.todo.id);
+      },
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 17
+      }
+    }));
+  };
+
+  exports.TodoItem = TodoItem;
+},698,[1,46,2,699],"src\\components\\todo\\todoItem\\TodoItem.tsx");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
+
+  var _default = _reactNative.StyleSheet.create({
+    container: {
+      borderColor: "#d6d7da",
+      borderRadius: 4,
+      borderWidth: 1,
+      margin: 5,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignSelf: "stretch",
+      alignItems: "center",
+      padding: 5
+    },
+    text: {
+      fontSize: 30,
+      fontWeight: "bold"
+    },
+    strikeout: {
+      textDecorationLine: "line-through",
+      textDecorationStyle: "solid"
+    }
+  });
+
+  exports.default = _default;
+},699,[2],"src\\components\\todo\\todoItem\\TodoItemStyle.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -105212,12 +106961,252 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default = _reactNative.StyleSheet.create({
     container: {
       alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "column",
+      flex: 1
+    },
+    scrollViewStyle: {
+      flexGrow: 1
+    },
+    todoContainer: {
+      width: "100%",
+      flex: 1
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: "bold"
+    }
+  });
+
+  exports.default = _default;
+},700,[2],"src\\components\\todo\\TodoStyle.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function get() {
+      return _CreateTodoContainer.default;
+    }
+  });
+
+  var _CreateTodoContainer = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "./CreateTodoContainer"));
+},701,[1,702],"src\\components\\todo\\createToDo\\index.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = exports.mapStateToProps = void 0;
+
+  var _reactRedux = _$$_REQUIRE(_dependencyMap[0], "react-redux");
+
+  var _TodoActions = _$$_REQUIRE(_dependencyMap[1], "../TodoActions");
+
+  var _CreateTodo = _$$_REQUIRE(_dependencyMap[2], "./CreateTodo");
+
+  var mapStateToProps = function mapStateToProps() {
+    return {};
+  };
+
+  exports.mapStateToProps = mapStateToProps;
+
+  var _default = (0, _reactRedux.connect)(mapStateToProps, {
+    addToDoItem: _TodoActions.addTodoItem
+  })(_CreateTodo.CreateTodo);
+
+  exports.default = _default;
+},702,[542,703,704],"src\\components\\todo\\createToDo\\CreateTodoContainer.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.toggleTodoItem = exports.deleteTodoItem = exports.addTodoItem = void 0;
+
+  var _TodoConstants = _$$_REQUIRE(_dependencyMap[0], "./TodoConstants");
+
+  var addTodoItem = function addTodoItem(todoName) {
+    return {
+      payload: todoName,
+      type: _TodoConstants.ADD_TODO
+    };
+  };
+
+  exports.addTodoItem = addTodoItem;
+
+  var deleteTodoItem = function deleteTodoItem(id) {
+    return {
+      payload: id,
+      type: _TodoConstants.DELETE_TODO
+    };
+  };
+
+  exports.deleteTodoItem = deleteTodoItem;
+
+  var toggleTodoItem = function toggleTodoItem(todo) {
+    return {
+      payload: todo,
+      type: _TodoConstants.TOGGLE_TODO
+    };
+  };
+
+  exports.toggleTodoItem = toggleTodoItem;
+},703,[569],"src\\components\\todo\\TodoActions.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = exports.CreateTodo = void 0;
+
+  var _classCallCheck2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/classCallCheck"));
+
+  var _createClass2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/createClass"));
+
+  var _possibleConstructorReturn2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "@babel/runtime/helpers/possibleConstructorReturn"));
+
+  var _getPrototypeOf2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "@babel/runtime/helpers/getPrototypeOf"));
+
+  var _inherits2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "@babel/runtime/helpers/inherits"));
+
+  var _react = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "react"));
+
+  var _index = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "./../../../../node_modules/react-transform-hmr/lib/index.js"));
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[8], "react-native");
+
+  var _CreateTodoStyle = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "./CreateTodoStyle"));
+
+  var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\components\\todo\\createToDo\\CreateTodo.tsx";
+  var _components = {
+    CreateTodo: {
+      displayName: "CreateTodo"
+    }
+  };
+
+  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index.default)({
+    filename: "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\components\\todo\\createToDo\\CreateTodo.tsx",
+    components: _components,
+    locals: [module],
+    imports: [_react.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var CreateTodo = function (_React$Component) {
+    (0, _inherits2.default)(CreateTodo, _React$Component);
+
+    function CreateTodo(props) {
+      var _this;
+
+      (0, _classCallCheck2.default)(this, CreateTodo);
+      _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(CreateTodo).call(this, props));
+
+      _this.createTodoItem = function () {
+        _this.props.addToDoItem(_this.state.todoName);
+
+        _this.setState({
+          todoName: ""
+        });
+      };
+
+      _this.state = {
+        todoName: ""
+      };
+      return _this;
+    }
+
+    (0, _createClass2.default)(CreateTodo, [{
+      key: "render",
+      value: function render() {
+        var _this2 = this;
+
+        return _react.default.createElement(_reactNative.View, {
+          style: _CreateTodoStyle.default.container,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 23
+          }
+        }, _react.default.createElement(_reactNative.TextInput, {
+          value: this.state.todoName,
+          onChangeText: function onChangeText(text) {
+            return _this2.setState({
+              todoName: text
+            });
+          },
+          onSubmitEditing: this.createTodoItem,
+          placeholder: "Enter a new todo",
+          returnKeyType: "done",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 24
+          }
+        }));
+      }
+    }]);
+    return CreateTodo;
+  }(_react.default.Component);
+
+  exports.CreateTodo = CreateTodo;
+  exports.CreateTodo = CreateTodo = _wrapComponent("CreateTodo")(CreateTodo);
+  var _default2 = CreateTodo;
+  exports.default = _default2;
+},704,[1,19,20,27,30,33,46,184,2,705],"src\\components\\todo\\createToDo\\CreateTodo.tsx");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
+
+  var _default = _reactNative.StyleSheet.create({
+    container: {
+      width: "100%",
+      fontSize: 16
+    }
+  });
+
+  exports.default = _default;
+},705,[2],"src\\components\\todo\\createToDo\\CreateTodoStyle.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.getTodos = void 0;
+
+  var _TodoConstants = _$$_REQUIRE(_dependencyMap[0], "./TodoConstants");
+
+  var getTodos = function getTodos(state) {
+    return state[_TodoConstants.REDUCER_KEY];
+  };
+
+  exports.getTodos = getTodos;
+},706,[569],"src\\components\\todo\\TodoSelectors.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
+
+  var _default = _reactNative.StyleSheet.create({
+    container: {
       backgroundColor: "#F5FCFF",
-      flex: 1,
-      justifyContent: "center"
+      flex: 1
     },
     instructions: {
       color: "#333333",
+      fontSize: 16,
+      fontWeight: "bold",
       marginBottom: 5,
       textAlign: "center"
     },
@@ -105229,13 +107218,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   });
 
   exports.default = _default;
-},671,[2],"src\\screens\\HomeScreen\\HomeScreenStyles.ts");
+},707,[2],"src\\screens\\HomeScreen\\HomeScreenStyles.ts");
 __d(function(global, require, _aUnused, _bUnused, module, exports, _cUnused) {
   module.exports = {
   "name": "TodoApp",
   "displayName": "TodoApp"
 };
-},672,[],"app.json");
+},708,[],"app.json");
 __r(82);
 __r(0);
 //# sourceMappingURL=index.map
