@@ -11,5 +11,5 @@ export const mapStateToProps = (state: IAppState) => ({
 
 export default connect(
   mapStateToProps,
-  { addToDoItem: addTodoItem, toggleToDoItem: toggleTodoItem, deleteToDoItem: deleteTodoItem,  },
+  { addTodoItem, toggleTodoItem, deleteTodoItem },
 )(Todo);

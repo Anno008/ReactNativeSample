@@ -1,23 +1,20 @@
 import React, { Component } from "react";
-import { Text, View, Alert, ScrollView } from "react-native";
+import { Text, View, ScrollView } from "react-native";
 
 import { ITodoItem } from "../../models/ITodoItem";
-import { TodoItem } from "./toDoItem/TodoItem";
+import { TodoItem } from "./todoItem/TodoItem";
 import styles from "./TodoStyle";
 import CreateTodo from "./createToDo";
+import { IAction } from "../../models/IAction";
 
 interface IProps {
   todos: ITodoItem[];
-  addTodoItem: (todo: ITodoItem) => void;
-  toggleTodoItem: (todo: ITodoItem) => void;
-  deleteTodoItem: (id: number) => void;
+  addTodoItem: (todo: ITodoItem) => IAction<string>;
+  toggleTodoItem: (todo: ITodoItem) => IAction<ITodoItem>;
+  deleteTodoItem: (id: number) => IAction<number>;
 }
 
-interface IState {
-  newTodoItem: ITodoItem;
-}
-
-export class Todo extends Component<IProps, IState> {
+export class Todo extends Component<IProps> {
   scrollView: React.RefObject<ScrollView>;
   
   constructor(props: IProps) {
