@@ -75,7 +75,7 @@
       "src/**"
     ],
     "modulePaths": [
-      "<rootDir>"
+      "<rootDir>/src"
     ],
     "setupFiles": [
       "./testsSetup/setup.js"
