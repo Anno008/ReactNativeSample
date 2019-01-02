@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Platform, Text, View } from "react-native";
-import Todo from "../../components/todo/index";
+import Todo from "../../components/todo";
 import styles from "./HomeScreenStyles";
 
 const instructions: string = Platform.select({
