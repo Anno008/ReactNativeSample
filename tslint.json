@@ -2,6 +2,6 @@
   "extends": ["tslint:recommended", "tslint-react"],
   "rules": {
     "trailing-comma": false,
-    "jsx-no-multiline-js": false,
+    "jsx-no-multiline-js": false
   }
 }

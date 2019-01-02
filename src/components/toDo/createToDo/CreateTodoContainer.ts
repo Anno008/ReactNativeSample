@@ -7,5 +7,5 @@ export const mapStateToProps = () => ({});
 
 export default connect(
   mapStateToProps,
-  { addToDoItem: addTodoItem }
+  { addTodoItem }
 )(CreateTodo);

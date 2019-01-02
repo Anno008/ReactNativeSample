@@ -2,22 +2,22 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
+    alignItems: "center",
+    alignSelf: "stretch",
     borderColor: "#d6d7da",
     borderRadius: 4,
     borderWidth: 1,
-    margin: 5,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignSelf: "stretch",
-    alignItems: "center",
+    margin: 5,
     padding: 5
+  },
+  strikeout: {
+    textDecorationLine: "line-through",
+    textDecorationStyle: "solid",
   },
   text: {
     fontSize: 30,
     fontWeight: "bold"
   },
-  strikeout: {
-    textDecorationLine: "line-through",
-    textDecorationStyle: "solid",
-  }
 });

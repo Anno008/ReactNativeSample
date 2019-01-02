@@ -1,11 +1,11 @@
 import { IAction } from "../../models/IAction";
+import { ITodoItem } from "../../models/ITodoItem";
 import {
   ADD_TODO,
-  TOGGLE_TODO,
+  DELETE_TODO,
   INITIAL_STATE,
-  DELETE_TODO
+  TOGGLE_TODO,
 } from "./TodoConstants";
-import { ITodoItem } from "../../models/ITodoItem";
 
 const todoReducer = (
   state: ITodoItem[] = INITIAL_STATE,
@@ -14,19 +14,19 @@ const todoReducer = (
   switch (action.type) {
     case ADD_TODO:
       const nameOfTheNewTodo = action.payload as string;
-      if (state.some(i => i.name === nameOfTheNewTodo)) {
+      if (state.some((i: ITodoItem) => i.name === nameOfTheNewTodo)) {
         return state;
       }
       const newTodo: ITodoItem = {
-        id: Math.max(...state.map(i => i.id)) + 1,
+        finished: false,
+        id: Math.max(...state.map((i: ITodoItem) => i.id)) + 1,
         name: action.payload as string,
-        finished: false
       };
       return [...state, newTodo];
     case DELETE_TODO:
-      return state.filter(i => i.id !== (action.payload as number));
+      return state.filter((i: ITodoItem) => i.id !== (action.payload as number));
     case TOGGLE_TODO:
-      const result = state.map(todoItem => {
+      const result = state.map((todoItem: ITodoItem) => {
         if (todoItem.name !== (action.payload as ITodoItem).name) {
           return todoItem;
         }

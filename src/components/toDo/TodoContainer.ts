@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 
 import { IAppState } from "../../store/IAppState";
 import { Todo } from "./Todo";
-import { addTodoItem, toggleTodoItem, deleteTodoItem } from "./TodoActions";
+import { deleteTodoItem, toggleTodoItem } from "./TodoActions";
 import { getTodos } from "./TodoSelectors";
 
 export const mapStateToProps = (state: IAppState) => ({
@@ -11,5 +11,5 @@ export const mapStateToProps = (state: IAppState) => ({
 
 export default connect(
   mapStateToProps,
-  { addTodoItem, toggleTodoItem, deleteTodoItem },
+  { toggleTodoItem, deleteTodoItem },
 )(Todo);

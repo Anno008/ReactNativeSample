@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Text, TouchableOpacity } from "react-native";
-import styles from "./TodoItemStyle";
 import { ITodoItem } from "../../../models/ITodoItem";
+import styles from "./TodoItemStyle";
 
 interface IProps {
   todo: ITodoItem;
@@ -10,11 +10,17 @@ interface IProps {
 }
 
 export const TodoItem: React.SFC<IProps> = (props: IProps) => {
-  const strikeOutStyle = props.todo.finished ? styles.strikeout : null
+  const { todo, toggleTodo, deleteTodo } = props;
+  const { finished, name, id } = todo;
+
+  const strikeOutStyle = finished ? styles.strikeout : null;
+  const toggleTodoHandler = () => toggleTodo(todo);
+  const deleteTodoHandler = () => deleteTodo(id);
+
   return (
-    <TouchableOpacity style={styles.container} onPress={_ => props.toggleTodo(props.todo)}>
-      <Text style={[styles.text, strikeOutStyle]}>{props.todo.name}</Text>
-      <Button title="Delete" onPress={() => props.deleteTodo(props.todo.id)}/>
+    <TouchableOpacity style={styles.container} onPress={toggleTodoHandler}>
+      <Text style={[styles.text, strikeOutStyle]}>{name}</Text>
+      <Button title="Delete" onPress={deleteTodoHandler}/>
     </TouchableOpacity>
   );
 };

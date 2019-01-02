@@ -3,7 +3,7 @@ import { TextInput, View } from "react-native";
 import styles from "./CreateTodoStyle";
 
 interface IProps {
-  addToDoItem: (todoName: string) => void;
+  addTodoItem: (todoName: string) => void;
 }
 
 interface IState {
@@ -23,7 +23,7 @@ export class CreateTodo extends React.Component<IProps, IState> {
       <View style={styles.container}>
         <TextInput
           value={this.state.todoName}
-          onChangeText={(text: string) => this.setState({ todoName: text })}
+          onChangeText={this.handleTextChange}
           onSubmitEditing={this.createTodoItem}
           placeholder="Enter a new todo"
           returnKeyType="done"
@@ -32,10 +32,12 @@ export class CreateTodo extends React.Component<IProps, IState> {
     );
   }
 
+  public handleTextChange = (text: string) => this.setState({ todoName: text });
+
   public createTodoItem = () => {
-    this.props.addToDoItem(this.state.todoName);
+    this.props.addTodoItem(this.state.todoName);
     this.setState({ todoName: "" });
-  };
+  }
 }
 
 export default CreateTodo;
