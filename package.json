@@ -78,7 +78,7 @@
       "<rootDir>"
     ],
     "setupFiles": [
-      "./tests/setup.js"
+      "./testsSetup/setup.js"
     ]
   }
 }

@@ -22,6 +22,8 @@ ShallowWrapper {
           style={
             Object {
               "color": "#333333",
+              "fontSize": 16,
+              "fontWeight": "bold",
               "marginBottom": 5,
               "textAlign": "center",
             }
@@ -33,19 +35,20 @@ ShallowWrapper {
           style={
             Object {
               "color": "#333333",
+              "fontSize": 16,
+              "fontWeight": "bold",
               "marginBottom": 5,
               "textAlign": "center",
             }
           }
         >
-          Press Cmd+R to reload, Cmd+D or shake for dev menu
+          iOS
         </Text>,
+        <Connect(Todo) />,
       ],
       "style": Object {
-        "alignItems": "center",
         "backgroundColor": "#F5FCFF",
         "flex": 1,
-        "justifyContent": "center",
       },
     },
     "ref": null,
@@ -58,6 +61,8 @@ ShallowWrapper {
           "children": "Home screen",
           "style": Object {
             "color": "#333333",
+            "fontSize": 16,
+            "fontWeight": "bold",
             "marginBottom": 5,
             "textAlign": "center",
           },
@@ -71,15 +76,26 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "children": "Press Cmd+R to reload, Cmd+D or shake for dev menu",
+          "children": "iOS",
           "style": Object {
             "color": "#333333",
+            "fontSize": 16,
+            "fontWeight": "bold",
             "marginBottom": 5,
             "textAlign": "center",
           },
         },
         "ref": null,
-        "rendered": "Press Cmd+R to reload, Cmd+D or shake for dev menu",
+        "rendered": "iOS",
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {},
+        "ref": null,
+        "rendered": null,
         "type": [Function],
       },
     ],
@@ -96,6 +112,8 @@ ShallowWrapper {
             style={
               Object {
                 "color": "#333333",
+                "fontSize": 16,
+                "fontWeight": "bold",
                 "marginBottom": 5,
                 "textAlign": "center",
               }
@@ -107,19 +125,20 @@ ShallowWrapper {
             style={
               Object {
                 "color": "#333333",
+                "fontSize": 16,
+                "fontWeight": "bold",
                 "marginBottom": 5,
                 "textAlign": "center",
               }
             }
           >
-            Press Cmd+R to reload, Cmd+D or shake for dev menu
+            iOS
           </Text>,
+          <Connect(Todo) />,
         ],
         "style": Object {
-          "alignItems": "center",
           "backgroundColor": "#F5FCFF",
           "flex": 1,
-          "justifyContent": "center",
         },
       },
       "ref": null,
@@ -132,6 +151,8 @@ ShallowWrapper {
             "children": "Home screen",
             "style": Object {
               "color": "#333333",
+              "fontSize": 16,
+              "fontWeight": "bold",
               "marginBottom": 5,
               "textAlign": "center",
             },
@@ -145,15 +166,26 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "children": "Press Cmd+R to reload, Cmd+D or shake for dev menu",
+            "children": "iOS",
             "style": Object {
               "color": "#333333",
+              "fontSize": 16,
+              "fontWeight": "bold",
               "marginBottom": 5,
               "textAlign": "center",
             },
           },
           "ref": null,
-          "rendered": "Press Cmd+R to reload, Cmd+D or shake for dev menu",
+          "rendered": "iOS",
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {},
+          "ref": null,
+          "rendered": null,
           "type": [Function],
         },
       ],
