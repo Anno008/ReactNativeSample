@@ -87708,11 +87708,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }
 
         var newTodo = {
+          finished: false,
           id: Math.max.apply(Math, (0, _toConsumableArray2.default)(state.map(function (i) {
             return i.id;
           }))) + 1,
-          name: action.payload,
-          finished: false
+          name: action.payload
         };
         return [].concat((0, _toConsumableArray2.default)(state), [newTodo]);
 
@@ -106729,13 +106729,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.mapStateToProps = mapStateToProps;
 
   var _default = (0, _reactRedux.connect)(mapStateToProps, {
-    addTodoItem: _TodoActions.addTodoItem,
     toggleTodoItem: _TodoActions.toggleTodoItem,
     deleteTodoItem: _TodoActions.deleteTodoItem
   })(_Todo.Todo);
 
   exports.default = _default;
-},696,[542,697,703,706],"src\\components\\todo\\TodoContainer.ts");
+},696,[542,697,700,706],"src\\components\\todo\\TodoContainer.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -106762,11 +106761,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _reactNative = _$$_REQUIRE(_dependencyMap[9], "react-native");
 
-  var _TodoItem = _$$_REQUIRE(_dependencyMap[10], "./todoItem/TodoItem");
+  var _createToDo = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[10], "./createToDo"));
 
-  var _TodoStyle = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[11], "./TodoStyle"));
+  var _TodoItem = _$$_REQUIRE(_dependencyMap[11], "./todoItem/TodoItem");
 
-  var _createToDo = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[12], "./createToDo"));
+  var _TodoStyle = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[12], "./TodoStyle"));
 
   var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\components\\todo\\Todo.tsx";
   var _components = {
@@ -106805,7 +106804,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           onContentSizeChange: _this.scrollToBottom,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 37
+            lineNumber: 36
           }
         }, todos.map(function (todoItem) {
           return _react.default.createElement(_TodoItem.TodoItem, {
@@ -106847,18 +106846,18 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           style: _TodoStyle.default.container,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 28
+            lineNumber: 27
           }
         }, _react.default.createElement(_reactNative.Text, {
           style: _TodoStyle.default.title,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 29
+            lineNumber: 28
           }
         }, "Todos"), this.renderTodos(todos), _react.default.createElement(_createToDo.default, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 31
+            lineNumber: 30
           }
         }));
       }
@@ -106870,116 +106869,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.Todo = Todo = _wrapComponent("Todo")(Todo);
   var _default2 = Todo;
   exports.default = _default2;
-},697,[1,541,19,20,27,30,33,46,184,2,698,700,701],"src\\components\\todo\\Todo.tsx");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.TodoItem = void 0;
-
-  var _react = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "react"));
-
-  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
-
-  var _TodoItemStyle = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./TodoItemStyle"));
-
-  var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\components\\todo\\todoItem\\TodoItem.tsx";
-
-  var TodoItem = function TodoItem(props) {
-    var strikeOutStyle = props.todo.finished ? _TodoItemStyle.default.strikeout : null;
-    return _react.default.createElement(_reactNative.TouchableOpacity, {
-      style: _TodoItemStyle.default.container,
-      onPress: function onPress(_) {
-        return props.toggleTodo(props.todo);
-      },
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 15
-      }
-    }, _react.default.createElement(_reactNative.Text, {
-      style: [_TodoItemStyle.default.text, strikeOutStyle],
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 16
-      }
-    }, props.todo.name), _react.default.createElement(_reactNative.Button, {
-      title: "Delete",
-      onPress: function onPress() {
-        return props.deleteTodo(props.todo.id);
-      },
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 17
-      }
-    }));
-  };
-
-  exports.TodoItem = TodoItem;
-},698,[1,46,2,699],"src\\components\\todo\\todoItem\\TodoItem.tsx");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.default = void 0;
-
-  var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
-
-  var _default = _reactNative.StyleSheet.create({
-    container: {
-      borderColor: "#d6d7da",
-      borderRadius: 4,
-      borderWidth: 1,
-      margin: 5,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignSelf: "stretch",
-      alignItems: "center",
-      padding: 5
-    },
-    text: {
-      fontSize: 30,
-      fontWeight: "bold"
-    },
-    strikeout: {
-      textDecorationLine: "line-through",
-      textDecorationStyle: "solid"
-    }
-  });
-
-  exports.default = _default;
-},699,[2],"src\\components\\todo\\todoItem\\TodoItemStyle.ts");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.default = void 0;
-
-  var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
-
-  var _default = _reactNative.StyleSheet.create({
-    container: {
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "column",
-      flex: 1
-    },
-    scrollViewStyle: {
-      flexGrow: 1
-    },
-    todoContainer: {
-      width: "100%",
-      flex: 1
-    },
-    title: {
-      fontSize: 20,
-      fontWeight: "bold"
-    }
-  });
-
-  exports.default = _default;
-},700,[2],"src\\components\\todo\\TodoStyle.ts");
+},697,[1,541,19,20,27,30,33,46,184,2,698,703,705],"src\\components\\todo\\Todo.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -106994,7 +106884,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   });
 
   var _CreateTodoContainer = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "./CreateTodoContainer"));
-},701,[1,702],"src\\components\\todo\\createToDo\\index.ts");
+},698,[1,699],"src\\components\\todo\\createToDo\\index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -107014,11 +106904,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.mapStateToProps = mapStateToProps;
 
   var _default = (0, _reactRedux.connect)(mapStateToProps, {
-    addToDoItem: _TodoActions.addTodoItem
+    addTodoItem: _TodoActions.addTodoItem
   })(_CreateTodo.CreateTodo);
 
   exports.default = _default;
-},702,[542,703,704],"src\\components\\todo\\createToDo\\CreateTodoContainer.ts");
+},699,[542,700,701],"src\\components\\todo\\createToDo\\CreateTodoContainer.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -107053,7 +106943,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   exports.toggleTodoItem = toggleTodoItem;
-},703,[569],"src\\components\\todo\\TodoActions.ts");
+},700,[569],"src\\components\\todo\\TodoActions.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
@@ -107109,8 +106999,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       (0, _classCallCheck2.default)(this, CreateTodo);
       _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(CreateTodo).call(this, props));
 
+      _this.handleTextChange = function (text) {
+        return _this.setState({
+          todoName: text
+        });
+      };
+
       _this.createTodoItem = function () {
-        _this.props.addToDoItem(_this.state.todoName);
+        _this.props.addTodoItem(_this.state.todoName);
 
         _this.setState({
           todoName: ""
@@ -107126,8 +107022,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     (0, _createClass2.default)(CreateTodo, [{
       key: "render",
       value: function render() {
-        var _this2 = this;
-
         return _react.default.createElement(_reactNative.View, {
           style: _CreateTodoStyle.default.container,
           __source: {
@@ -107136,11 +107030,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           }
         }, _react.default.createElement(_reactNative.TextInput, {
           value: this.state.todoName,
-          onChangeText: function onChangeText(text) {
-            return _this2.setState({
-              todoName: text
-            });
-          },
+          onChangeText: this.handleTextChange,
           onSubmitEditing: this.createTodoItem,
           placeholder: "Enter a new todo",
           returnKeyType: "done",
@@ -107158,7 +107048,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.CreateTodo = CreateTodo = _wrapComponent("CreateTodo")(CreateTodo);
   var _default2 = CreateTodo;
   exports.default = _default2;
-},704,[1,19,20,27,30,33,46,184,2,705],"src\\components\\todo\\createToDo\\CreateTodo.tsx");
+},701,[1,19,20,27,30,33,46,184,2,702],"src\\components\\todo\\createToDo\\CreateTodo.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -107169,13 +107059,133 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _default = _reactNative.StyleSheet.create({
     container: {
-      width: "100%",
-      fontSize: 16
+      fontSize: 16,
+      width: "100%"
     }
   });
 
   exports.default = _default;
-},705,[2],"src\\components\\todo\\createToDo\\CreateTodoStyle.ts");
+},702,[2],"src\\components\\todo\\createToDo\\CreateTodoStyle.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.TodoItem = void 0;
+
+  var _react = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "react"));
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
+
+  var _TodoItemStyle = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./TodoItemStyle"));
+
+  var _jsxFileName = "c:\\IT\\ReactNative\\NEW\\T\\TodoApp\\src\\components\\todo\\todoItem\\TodoItem.tsx";
+
+  var TodoItem = function TodoItem(props) {
+    var todo = props.todo,
+        toggleTodo = props.toggleTodo,
+        deleteTodo = props.deleteTodo;
+    var finished = todo.finished,
+        name = todo.name,
+        id = todo.id;
+    var strikeOutStyle = finished ? _TodoItemStyle.default.strikeout : null;
+
+    var toggleTodoHandler = function toggleTodoHandler() {
+      return toggleTodo(todo);
+    };
+
+    var deleteTodoHandler = function deleteTodoHandler() {
+      return deleteTodo(id);
+    };
+
+    return _react.default.createElement(_reactNative.TouchableOpacity, {
+      style: _TodoItemStyle.default.container,
+      onPress: toggleTodoHandler,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 21
+      }
+    }, _react.default.createElement(_reactNative.Text, {
+      style: [_TodoItemStyle.default.text, strikeOutStyle],
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 22
+      }
+    }, name), _react.default.createElement(_reactNative.Button, {
+      title: "Delete",
+      onPress: deleteTodoHandler,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 23
+      }
+    }));
+  };
+
+  exports.TodoItem = TodoItem;
+},703,[1,46,2,704],"src\\components\\todo\\todoItem\\TodoItem.tsx");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
+
+  var _default = _reactNative.StyleSheet.create({
+    container: {
+      alignItems: "center",
+      alignSelf: "stretch",
+      borderColor: "#d6d7da",
+      borderRadius: 4,
+      borderWidth: 1,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      margin: 5,
+      padding: 5
+    },
+    strikeout: {
+      textDecorationLine: "line-through",
+      textDecorationStyle: "solid"
+    },
+    text: {
+      fontSize: 30,
+      fontWeight: "bold"
+    }
+  });
+
+  exports.default = _default;
+},704,[2],"src\\components\\todo\\todoItem\\TodoItemStyle.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
+
+  var _default = _reactNative.StyleSheet.create({
+    container: {
+      alignItems: "center",
+      flex: 1,
+      flexDirection: "column",
+      justifyContent: "center"
+    },
+    scrollViewStyle: {
+      flexGrow: 1
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: "bold"
+    },
+    todoContainer: {
+      flex: 1,
+      width: "100%"
+    }
+  });
+
+  exports.default = _default;
+},705,[2],"src\\components\\todo\\TodoStyle.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
