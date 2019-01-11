@@ -3,7 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 
 import { IAction } from "../../models/IAction";
 import { ITodoItem } from "../../models/ITodoItem";
-import CreateTodo from "./createToDo";
+import CreateTodo from "./createTodo";
 import { TodoItem } from "./todoItem/TodoItem";
 import styles from "./TodoStyle";
 
