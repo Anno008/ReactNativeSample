@@ -14,10 +14,11 @@ export default StyleSheet.create({
   },
   strikeout: {
     textDecorationLine: "line-through",
-    textDecorationStyle: "solid",
+    textDecorationStyle: "solid"
   },
   text: {
+    flex: 1,
     fontSize: 30,
     fontWeight: "bold"
-  },
+  }
 });

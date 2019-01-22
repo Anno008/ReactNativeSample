@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Text, TouchableOpacity } from "react-native";
-import { View } from "react-native-animatable";
+import { View as AnimatedView } from "react-native-animatable";
 import { ITodoItem } from "../../../models/ITodoItem";
 import styles from "./TodoItemStyle";
 
@@ -19,11 +19,11 @@ export const TodoItem: React.SFC<IProps> = (props: IProps) => {
   const deleteTodoHandler = () => deleteTodo(id);
 
   return (
-    <View animation="fadeInLeft">
+    <AnimatedView animation="fadeInLeft">
       <TouchableOpacity style={styles.container} onPress={toggleTodoHandler}>
         <Text style={[styles.text, strikeOutStyle]}>{name}</Text>
         <Button title="Delete" onPress={deleteTodoHandler} />
       </TouchableOpacity>
-    </View>
+    </AnimatedView>
   );
 };
