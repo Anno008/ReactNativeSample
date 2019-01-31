@@ -5,7 +5,7 @@ import styles from "./HomeScreenStyles";
 
 const instructions: string = Platform.select({
   android: `Android`,
-  ios: `iOS`,
+  ios: `iOS`
 });
 
 export const HomeScreen: React.StatelessComponent = (): JSX.Element => (
@@ -15,3 +15,5 @@ export const HomeScreen: React.StatelessComponent = (): JSX.Element => (
     <Todo />
   </View>
 );
+
+export default HomeScreen;

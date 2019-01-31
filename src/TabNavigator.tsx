@@ -1,5 +1,5 @@
 import { createAppContainer, createBottomTabNavigator, NavigationContainer } from "react-navigation";
-import { AboutScreen } from "./screens/AboutScreen/AboutScreen";
+import AboutScreen from "./screens/AboutScreen";
 import HomeScreen from "./screens/HomeScreen";
 
 const TabNavigator: NavigationContainer = createBottomTabNavigator({

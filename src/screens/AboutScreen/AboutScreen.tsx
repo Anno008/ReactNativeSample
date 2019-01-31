@@ -6,3 +6,5 @@ export const AboutScreen: React.StatelessComponent = (): JSX.Element => (
     <Text>About screen</Text>
   </View>
 );
+
+export default AboutScreen;
