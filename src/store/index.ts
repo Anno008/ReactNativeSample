@@ -1,16 +1,11 @@
-import {
-  applyMiddleware,
-  combineReducers,
-  createStore,
-  Store
-} from "redux";
+import { applyMiddleware, combineReducers, createStore, Store } from "redux";
 
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 
-import { IAppState } from "./IAppState";
-import reducers from "./reducers";
+import { IAppState } from "store/IAppState";
+import reducers from "store/reducers";
 
 const persistConfig = {
   key: "root",

@@ -1,8 +1,8 @@
+import styles from "components/todo/todoItem/TodoItemStyle";
+import { ITodoItem } from "models/ITodoItem";
 import React from "react";
 import { Button, Text, TouchableOpacity } from "react-native";
 import { View as AnimatedView } from "react-native-animatable";
-import { ITodoItem } from "../../../models/ITodoItem";
-import styles from "./TodoItemStyle";
 
 interface IProps {
   todo: ITodoItem;

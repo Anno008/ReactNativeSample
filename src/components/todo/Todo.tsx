@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { ScrollView, Text, View } from "react-native";
 
-import { IAction } from "../../models/IAction";
-import { ITodoItem } from "../../models/ITodoItem";
-import CreateTodo from "./createTodo";
-import { TodoItem } from "./todoItem/TodoItem";
-import styles from "./TodoStyle";
+import CreateTodo from "components/todo/createTodo";
+import { TodoItem } from "components/todo/todoItem/TodoItem";
+import styles from "components/todo/TodoStyle";
+import { IAction } from "models/IAction";
+import { ITodoItem } from "models/ITodoItem";
 
 interface IProps {
   todos: ITodoItem[];

@@ -1,11 +1,6 @@
-import { IAction } from "../../models/IAction";
-import { ITodoItem } from "../../models/ITodoItem";
-import {
-  ADD_TODO,
-  DELETE_TODO,
-  INITIAL_STATE,
-  TOGGLE_TODO,
-} from "./TodoConstants";
+import {ADD_TODO, DELETE_TODO, INITIAL_STATE, TOGGLE_TODO} from "components/todo/TodoConstants";
+import { IAction } from "models/IAction";
+import { ITodoItem } from "models/ITodoItem";
 
 const todoReducer = (
   state: ITodoItem[] = INITIAL_STATE,

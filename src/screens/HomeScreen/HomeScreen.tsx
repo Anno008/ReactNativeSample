@@ -1,7 +1,7 @@
-import * as React from "react";
+import Todo from "components/todo";
+import React from "react";
 import { Platform, Text, View } from "react-native";
-import Todo from "../../components/todo";
-import styles from "./HomeScreenStyles";
+import styles from "screens/HomeScreen/HomeScreenStyles";
 
 const instructions: string = Platform.select({
   android: `Android`,

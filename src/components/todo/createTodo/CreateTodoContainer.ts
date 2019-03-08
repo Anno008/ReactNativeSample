@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
-import { addTodoItem } from "../TodoActions";
-import { CreateTodo } from "./CreateTodo";
+import { CreateTodo } from "components/todo/createTodo/CreateTodo";
+import { addTodoItem } from "components/todo/TodoActions";
 
 export const mapStateToProps = () => ({});
 

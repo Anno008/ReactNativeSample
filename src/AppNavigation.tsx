@@ -6,10 +6,11 @@ import {
   createBottomTabNavigator,
   NavigationContainer
 } from "react-navigation";
-import { HomeIcon } from "./components/icons/HomeIcon";
-import { InfoIcon } from "./components/icons/InfoIcon";
-import AboutScreen from "./screens/AboutScreen";
-import HomeScreen from "./screens/HomeScreen";
+
+import { HomeIcon } from "components/icons/HomeIcon";
+import { InfoIcon } from "components/icons/InfoIcon";
+import AboutScreen from "screens/AboutScreen";
+import HomeScreen from "screens/HomeScreen";
 
 const AppNavigation: NavigationContainer = createBottomTabNavigator(
   {

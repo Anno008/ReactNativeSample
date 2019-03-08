@@ -1,7 +1,6 @@
+import styles from "components/todo/createTodo/CreateTodoStyle";
 import React from "react";
 import { TextInput, View } from "react-native";
-import styles from "./CreateTodoStyle";
-
 interface IProps {
   addTodoItem: (todoName: string) => void;
 }

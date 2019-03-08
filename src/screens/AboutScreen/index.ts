@@ -1,1 +1,1 @@
-export { default } from "./AboutScreen";
+export { default } from "screens/AboutScreen/AboutScreen";
