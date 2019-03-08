@@ -1,5 +1,6 @@
 {
   "extends": ["tslint:recommended", "tslint-react"],
+  "defaultSeverity": "error",
   "rules": {
     "trailing-comma": false,
     "jsx-no-multiline-js": false
