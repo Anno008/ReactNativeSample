@@ -1,4 +1,4 @@
-import {ADD_TODO, DELETE_TODO, INITIAL_STATE, TOGGLE_TODO} from "components/todo/TodoConstants";
+import { ADD_TODO, DELETE_TODO, INITIAL_STATE, TOGGLE_TODO } from "components/todo/TodoConstants";
 import { IAction } from "models/IAction";
 import { ITodoItem } from "models/ITodoItem";
 
@@ -14,7 +14,7 @@ const todoReducer = (
       }
       const newTodo: ITodoItem = {
         finished: false,
-        id: Math.max(...state.map((i: ITodoItem) => i.id)) + 1,
+        id: Math.max(...state.map((i: ITodoItem) => i.id), 0) + 1,
         name: action.payload as string,
       };
       return [...state, newTodo];
