@@ -22,7 +22,7 @@ const todoReducer = (
       return state.filter((i: ITodoItem) => i.id !== (action.payload as number));
     case TOGGLE_TODO:
       const result = state.map((todoItem: ITodoItem) => {
-        if (todoItem.name !== (action.payload as ITodoItem).name) {
+        if (todoItem.id !== (action.payload as number)) {
           return todoItem;
         }
         todoItem.finished = !todoItem.finished;
