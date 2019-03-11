@@ -34,7 +34,7 @@ describe("TodoItem component test", () => {
     wrapper.find(TouchableOpacity).simulate("press");
 
     expect(mockedProps.toggleTodo).toBeCalled();
-    expect(mockedProps.toggleTodo).toBeCalledWith(mockedProps.todo);
+    expect(mockedProps.toggleTodo).toBeCalledWith(mockedProps.todo.id);
   });
 
   it("should call deleteTodo on button press", () => {

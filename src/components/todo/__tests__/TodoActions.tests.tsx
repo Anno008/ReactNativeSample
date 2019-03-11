@@ -37,15 +37,10 @@ describe("toggleTodoItem tests", () => {
     });
 
     it("should return object with payload and type", () => {
-        const todoItem = {
-            finished: true,
-            id: 1,
-            name: "test"
-        };
-        const result = toggleTodoItem(todoItem);
+        const result = toggleTodoItem(1);
 
         expect(result).toEqual({
-            payload: todoItem,
+            payload: 1,
             type: TOGGLE_TODO
         });
     });

@@ -12,7 +12,7 @@ export const deleteTodoItem = (id: number): IAction<number> => ({
   type: DELETE_TODO
 });
 
-export const toggleTodoItem = (todo: ITodoItem): IAction<ITodoItem> => ({
-  payload: todo,
+export const toggleTodoItem = (id: number): IAction<number> => ({
+  payload: id,
   type: TOGGLE_TODO
 });

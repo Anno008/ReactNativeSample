@@ -6,7 +6,7 @@ import { View as AnimatedView } from "react-native-animatable";
 
 interface IProps {
   todo: ITodoItem;
-  toggleTodo: (todoItem: ITodoItem) => void;
+  toggleTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
 }
 
@@ -15,7 +15,7 @@ export const TodoItem: React.SFC<IProps> = (props: IProps) => {
   const { finished, name, id } = todo;
 
   const strikeOutStyle = finished ? styles.strikeout : null;
-  const toggleTodoHandler = () => toggleTodo(todo);
+  const toggleTodoHandler = () => toggleTodo(id);
   const deleteTodoHandler = () => deleteTodo(id);
 
   return (

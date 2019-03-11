@@ -9,7 +9,7 @@ import { ITodoItem } from "models/ITodoItem";
 
 interface IProps {
   todos: ITodoItem[];
-  toggleTodoItem: (todo: ITodoItem) => IAction<ITodoItem>;
+  toggleTodoItem: (id: number) => IAction<number>;
   deleteTodoItem: (id: number) => IAction<number>;
 }
 
@@ -50,7 +50,7 @@ export class Todo extends Component<IProps> {
     </ScrollView>
   )
 
-  public toggleTodo = (todo: ITodoItem) => this.props.toggleTodoItem(todo);
+  public toggleTodo = (id: number) => this.props.toggleTodoItem(id);
 
   public deleteTodo = (id: number) => this.props.deleteTodoItem(id);
 
