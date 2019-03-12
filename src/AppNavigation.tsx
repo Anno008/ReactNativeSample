@@ -4,11 +4,13 @@ import React from "react";
 import {
   createAppContainer,
   createBottomTabNavigator,
-  NavigationContainer
+  NavigationContainer,
+  TabScene,
 } from "react-navigation";
 
 import { HomeIcon } from "components/icons/HomeIcon";
 import { InfoIcon } from "components/icons/InfoIcon";
+import { getMainNavigationIcon } from "decorators/GetMainNavigationIcon";
 import AboutScreen from "screens/AboutScreen";
 import HomeScreen from "screens/HomeScreen";
 
@@ -16,16 +18,14 @@ const AppNavigation: NavigationContainer = createBottomTabNavigator(
   {
     About: {
       navigationOptions: {
-        // props is of type TabScene from react-navigation
-        // didn't specify it to avoid crazy ternaries
-        tabBarIcon: (props: any) => <InfoIcon {...props} />,
+        tabBarIcon: (props: TabScene) => getMainNavigationIcon(InfoIcon, props),
         tabBarLabel: "About"
       },
       screen: AboutScreen
     },
     Home: {
       navigationOptions: {
-        tabBarIcon: (props: any) => <HomeIcon {...props} />,
+        tabBarIcon: (props: TabScene) => getMainNavigationIcon(HomeIcon, props),
         tabBarLabel: "Home"
       },
       screen: HomeScreen
