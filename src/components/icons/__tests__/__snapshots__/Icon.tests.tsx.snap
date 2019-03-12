@@ -1,0 +1,377 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Icon tests Should render HomeIcon 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Unknown
+    size={20}
+    tintColor="blue"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "children": <Svg
+        height={20}
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 24 24"
+        width={20}
+      >
+        <Path
+          d="M0 0h24v24H0V0z"
+          fill="none"
+        />
+        <Path
+          d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"
+          fill="blue"
+        />
+      </Svg>,
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": Array [
+          <Path
+            d="M0 0h24v24H0V0z"
+            fill="none"
+          />,
+          <Path
+            d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"
+            fill="blue"
+          />,
+        ],
+        "height": 20,
+        "preserveAspectRatio": "xMidYMid meet",
+        "viewBox": "0 0 24 24",
+        "width": 20,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "d": "M0 0h24v24H0V0z",
+            "fill": "none",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "d": "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z",
+            "fill": "blue",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": <Svg
+          height={20}
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 24 24"
+          width={20}
+        >
+          <Path
+            d="M0 0h24v24H0V0z"
+            fill="none"
+          />
+          <Path
+            d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"
+            fill="blue"
+          />
+        </Svg>,
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <Path
+              d="M0 0h24v24H0V0z"
+              fill="none"
+            />,
+            <Path
+              d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"
+              fill="blue"
+            />,
+          ],
+          "height": 20,
+          "preserveAspectRatio": "xMidYMid meet",
+          "viewBox": "0 0 24 24",
+          "width": 20,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "d": "M0 0h24v24H0V0z",
+              "fill": "none",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "d": "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z",
+              "fill": "blue",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`Icon tests Should render InfoIcon 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Unknown
+    size={20}
+    tintColor="blue"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "children": <Svg
+        height={20}
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 24 24"
+        width={20}
+      >
+        <Path
+          d="M0 0h24v24H0V0z"
+          fill="none"
+        />
+        <Path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+          fill="blue"
+        />
+      </Svg>,
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": Array [
+          <Path
+            d="M0 0h24v24H0V0z"
+            fill="none"
+          />,
+          <Path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+            fill="blue"
+          />,
+        ],
+        "height": 20,
+        "preserveAspectRatio": "xMidYMid meet",
+        "viewBox": "0 0 24 24",
+        "width": 20,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "d": "M0 0h24v24H0V0z",
+            "fill": "none",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "d": "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z",
+            "fill": "blue",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": <Svg
+          height={20}
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 24 24"
+          width={20}
+        >
+          <Path
+            d="M0 0h24v24H0V0z"
+            fill="none"
+          />
+          <Path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+            fill="blue"
+          />
+        </Svg>,
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <Path
+              d="M0 0h24v24H0V0z"
+              fill="none"
+            />,
+            <Path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+              fill="blue"
+            />,
+          ],
+          "height": 20,
+          "preserveAspectRatio": "xMidYMid meet",
+          "viewBox": "0 0 24 24",
+          "width": 20,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "d": "M0 0h24v24H0V0z",
+              "fill": "none",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "d": "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z",
+              "fill": "blue",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
