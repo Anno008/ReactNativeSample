@@ -25,10 +25,10 @@ describe("Todo component test", () => {
   it("should call toggle todo on child action", () => {
     const wrapper: ShallowWrapper = shallow(<Todo {...mockProps} />);
 
-    wrapper.find(TodoItem).prop("toggleTodo")(mockTodoItem);
+    wrapper.find(TodoItem).prop("toggleTodo")(mockTodoItem.id);
 
     expect(mockProps.toggleTodoItem).toBeCalled();
-    expect(mockProps.toggleTodoItem).toBeCalledWith(mockTodoItem);
+    expect(mockProps.toggleTodoItem).toBeCalledWith(mockTodoItem.id);
   });
 
   it("should call delete todo on child action", () => {
