@@ -1,4 +1,4 @@
-import CreateTodo from "components/todo/CreateTodo/CreateTodo";
+import CreateTodo from "components/todo/createTodo/CreateTodo";
 import { shallow, ShallowWrapper } from "enzyme";
 import React from "react";
 
