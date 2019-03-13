@@ -59,6 +59,7 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!react-navigation)/"
     ],
+  
     "testPathIgnorePatterns": [
       "/node_modules/"
     ],
@@ -75,6 +76,7 @@
       "!**/__snapshots__/**",
       "!**/*.styles.ts",
       "!**/index.ts",
+      "!**/I[A-Z]*.{ts}",
       "src/**"
     ],
     "modulePaths": [
