@@ -1,8 +1,11 @@
 {
-  "extends": ["tslint:recommended", "tslint-react"],
+  "extends": [
+    "tslint:recommended",
+    "tslint-react"
+  ],
   "defaultSeverity": "error",
   "rules": {
+    "member-access": false,
     "trailing-comma": false,
-    "jsx-no-multiline-js": false
   }
 }

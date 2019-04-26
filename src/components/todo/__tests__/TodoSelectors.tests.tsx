@@ -1,7 +1,7 @@
 import { REDUCER_KEY, } from "components/todo/TodoConstants";
 import { getTodos } from "components/todo/TodoSelectors";
 import { ITodoItem } from "models/ITodoItem";
-import { IAppState } from "store/IAppState";
+import { IAppState } from "models/IAppState";
 
 describe("Todo selector tests", () => {
     const todos: ITodoItem[] = [

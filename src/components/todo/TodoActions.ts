@@ -1,6 +1,5 @@
 import { ADD_TODO, DELETE_TODO, TOGGLE_TODO } from "components/todo/TodoConstants";
 import { IAction } from "models/IAction";
-import { ITodoItem } from "models/ITodoItem";
 
 export const addTodoItem = (todoName: string): IAction<string> => ({
   payload: todoName,

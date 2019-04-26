@@ -4,8 +4,9 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 
-import { IAppState } from "store/IAppState";
+import { IAppState } from "models/IAppState";
 import reducers from "store/reducers";
+import { IAction } from "models/IAction";
 
 const persistConfig = {
   key: "root",

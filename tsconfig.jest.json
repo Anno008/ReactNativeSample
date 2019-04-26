@@ -1,7 +1,9 @@
 {
-  "extends": "./tsconfig",
-  "compilerOptions": {
-    "jsx": "react",
-    "module": "commonjs"
+    "extends": "./tsconfig",
+    "compilerOptions": {
+      "jsx": "react",
+      "module": "commonjs"
+    },
+    "include": ["(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"]
   }
-}
+  
