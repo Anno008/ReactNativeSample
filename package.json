@@ -65,12 +65,14 @@
       "node"
     ],
     "collectCoverageFrom": [
+      "src/**",
       "!**/node_modules/**",
       "!**/__snapshots__/**",
       "!**/*.styles.ts",
       "!**/index.ts",
       "!**/I[A-Z]*.{ts}",
-      "src/**"
+      "!src/App.tsx",
+      "!src/models/**"
     ],
     "modulePaths": [
       "<rootDir>/src"

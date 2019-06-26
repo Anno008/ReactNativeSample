@@ -1,6 +1,6 @@
 import React from "react";
 
-import AppNavigation from "AppNavigation";
+import AppNavigation from "navigation/AppNavigation";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import persistor, { store } from "store";
