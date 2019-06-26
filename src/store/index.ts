@@ -6,11 +6,10 @@ import thunk from "redux-thunk";
 
 import { IAppState } from "models/IAppState";
 import reducers from "store/reducers";
-import { IAction } from "models/IAction";
 
 const persistConfig = {
-  key: "root",
-  storage
+    key: "root",
+    storage
 };
 
 const rootReducer = combineReducers<IAppState>(reducers);
@@ -18,8 +17,8 @@ const rootReducer = combineReducers<IAppState>(reducers);
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store: Store = createStore(
-  persistedReducer,
-  applyMiddleware(thunk)
+    persistedReducer,
+    applyMiddleware(thunk)
 );
 
 export default persistStore(store);

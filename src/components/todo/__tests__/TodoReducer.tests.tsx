@@ -1,21 +1,20 @@
 import { ADD_TODO, DELETE_TODO, INITIAL_STATE, TOGGLE_TODO } from "components/todo/TodoConstants";
 import TodoReducer from "components/todo/TodoReducer";
-import { IAction } from "models/IAction";
 import { ITodoItem } from "models/ITodoItem";
 
-describe("TodoReducer tests", () => {
-    it("should be a function", () => {
+describe("TodoReducer tests", (): void => {
+    it("should be a function", (): void => {
         expect(typeof TodoReducer).toEqual("function");
     });
 
-    it("Should initialize with initial state", () => {
+    it("Should initialize with initial state", (): void => {
         expect(TodoReducer(undefined, {
             payload: "Test",
             type: "Test",
         })).toEqual(INITIAL_STATE);
     });
 
-    it("Should return previous state if no matching action was found", () => {
+    it("Should return previous state if no matching action was found", (): void => {
         const initialState: ITodoItem[] = [];
 
         const firstState = TodoReducer(initialState, {
@@ -32,7 +31,7 @@ describe("TodoReducer tests", () => {
         expect(firstState).toEqual(nextState);
     });
 
-    it("Should add todo item to previous array", () => {
+    it("Should add todo item to previous array", (): void => {
         const initialState: ITodoItem[] = [
             {id: 1, finished: true, name: "First todo item"}
         ];
@@ -45,7 +44,7 @@ describe("TodoReducer tests", () => {
         expect(result.length).toEqual(2);
     });
 
-    it("Should not add todo item to previous array if the item with the same name already exist", () => {
+    it("Should not add todo item to previous array if the item with the same name already exist", (): void => {
         const initialState: ITodoItem[] = [
             {id: 1, finished: true, name: "Todo item"}
         ];
@@ -58,7 +57,7 @@ describe("TodoReducer tests", () => {
         expect(result.length).toEqual(1);
     });
 
-    it("Should remove todo item if the id matches", () => {
+    it("Should remove todo item if the id matches", (): void => {
         const initialState: ITodoItem[] = [
             {id: 1, finished: true, name: "First todo item"}
         ];
@@ -71,7 +70,7 @@ describe("TodoReducer tests", () => {
         expect(result.length).toEqual(0);
     });
 
-    it("Should not remove todo item if the id does not match", () => {
+    it("Should not remove todo item if the id does not match", (): void => {
         const initialState: ITodoItem[] = [
             {id: 1, finished: true, name: "First todo item"}
         ];
@@ -84,7 +83,7 @@ describe("TodoReducer tests", () => {
         expect(result.length).toEqual(1);
     });
 
-    it("Should toggle finished flag if the id matches", () => {
+    it("Should toggle finished flag if the id matches", (): void => {
         const initialState: ITodoItem[] = [
             {id: 1, finished: true, name: "First todo item"}
         ];
@@ -98,7 +97,7 @@ describe("TodoReducer tests", () => {
         expect(result[0].finished).toBeFalsy();
     });
 
-    it("Should not toggle finished flag if the the id does not match", () => {
+    it("Should not toggle finished flag if the the id does not match", (): void => {
         const initialState: ITodoItem[] = [
             {id: 1, finished: true, name: "First todo item"}
         ];

@@ -1,4 +1,4 @@
 export interface IIconProps {
-  tintColor: string;
-  size: number;
+    tintColor: string;
+    size: number;
 }

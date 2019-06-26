@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Icon tests Should render HomeIcon 1`] = `ShallowWrapper {}`;
+exports[`Icon tests Should match HomeIcon snapshot 1`] = `ShallowWrapper {}`;
 
-exports[`Icon tests Should render InfoIcon 1`] = `ShallowWrapper {}`;
+exports[`Icon tests Should match InfoIcon snapshot 1`] = `ShallowWrapper {}`;

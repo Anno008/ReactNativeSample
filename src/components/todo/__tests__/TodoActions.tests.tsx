@@ -1,27 +1,27 @@
 import { addTodoItem, deleteTodoItem, toggleTodoItem} from "components/todo/TodoActions";
 import { ADD_TODO, DELETE_TODO, TOGGLE_TODO } from "components/todo/TodoConstants";
 
-describe("addTodoItem tests", () => {
-  it("should be a function", () => {
-   expect(typeof addTodoItem).toBe("function");
-  });
-
-  it("should return object with payload and type", () => {
-      const result = addTodoItem("test");
-
-      expect(result).toEqual({
-          payload: "test",
-          type: ADD_TODO
-      });
-  });
-});
-
-describe("deleteTodoItem tests", () => {
-    it("should be a function", () => {
-     expect(typeof deleteTodoItem).toBe("function");
+describe("addTodoItem tests", (): void => {
+    it("should be a function", (): void => {
+        expect(typeof addTodoItem).toBe("function");
     });
 
-    it("should return object with payload and type", () => {
+    it("should return object with payload and type", (): void => {
+        const result = addTodoItem("test");
+
+        expect(result).toEqual({
+            payload: "test",
+            type: ADD_TODO
+        });
+    });
+});
+
+describe("deleteTodoItem tests", (): void => {
+    it("should be a function", (): void => {
+        expect(typeof deleteTodoItem).toBe("function");
+    });
+
+    it("should return object with payload and type", (): void => {
         const result = deleteTodoItem(1);
 
         expect(result).toEqual({
@@ -29,14 +29,14 @@ describe("deleteTodoItem tests", () => {
             type: DELETE_TODO
         });
     });
-  });
+});
 
-describe("toggleTodoItem tests", () => {
-    it("should be a function", () => {
-     expect(typeof toggleTodoItem).toBe("function");
+describe("toggleTodoItem tests", (): void => {
+    it("should be a function", (): void => {
+        expect(typeof toggleTodoItem).toBe("function");
     });
 
-    it("should return object with payload and type", () => {
+    it("should return object with payload and type", (): void => {
         const result = toggleTodoItem(1);
 
         expect(result).toEqual({
@@ -44,4 +44,4 @@ describe("toggleTodoItem tests", () => {
             type: TOGGLE_TODO
         });
     });
-  });
+});

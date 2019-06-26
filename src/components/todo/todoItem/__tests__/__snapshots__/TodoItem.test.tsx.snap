@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TodoItem component test should render todo item with finished set to false 1`] = `ShallowWrapper {}`;
+exports[`TodoItem component test Should match TodoItem snapshot with finished set to false 1`] = `ShallowWrapper {}`;
 
-exports[`TodoItem component test should render todo item with finished set to true 1`] = `ShallowWrapper {}`;
+exports[`TodoItem component test Should match TodoItem snapshot with finished set to true 1`] = `ShallowWrapper {}`;

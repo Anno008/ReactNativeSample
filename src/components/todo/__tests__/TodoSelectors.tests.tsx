@@ -3,7 +3,7 @@ import { getTodos } from "components/todo/TodoSelectors";
 import { ITodoItem } from "models/ITodoItem";
 import { IAppState } from "models/IAppState";
 
-describe("Todo selector tests", () => {
+describe("Todo selector tests", (): void => {
     const todos: ITodoItem[] = [
         { id: 1, finished: false, name: "First todo" }
     ];
@@ -11,7 +11,7 @@ describe("Todo selector tests", () => {
     const appState: IAppState = {
         [REDUCER_KEY]: todos
     };
-    it("Should return todo array for valid state", () => {
+    it("Should return todo array for valid state", (): void => {
         const result = getTodos(appState);
 
         expect(result.length).toEqual(1);

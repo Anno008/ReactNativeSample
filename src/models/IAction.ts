@@ -1,6 +1,6 @@
 export interface IAction<T> {
-  loading?: boolean;
-  error?: boolean;
-  payload: T;
-  type: string;
+    loading?: boolean;
+    error?: boolean;
+    payload: T;
+    type: string;
 }

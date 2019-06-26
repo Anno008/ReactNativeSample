@@ -3,16 +3,16 @@ import React from "react";
 import { HomeIcon } from "../HomeIcon";
 import { InfoIcon } from "../InfoIcon";
 
-describe("Icon tests", () => {
-  it("Should render HomeIcon", () => {
-    const wrapper = shallow(<HomeIcon size={20} tintColor="blue" />);
+describe("Icon tests", (): void => {
+    it("Should match HomeIcon snapshot", (): void => {
+        const wrapper = shallow(<HomeIcon size={20} tintColor="blue" />);
 
-    expect(wrapper).toMatchSnapshot();
-  });
+        expect(wrapper).toMatchSnapshot();
+    });
 
-  it("Should render InfoIcon", () => {
-    const wrapper = shallow(<InfoIcon size={20} tintColor="blue" />);
+    it("Should match InfoIcon snapshot", (): void => {
+        const wrapper = shallow(<InfoIcon size={20} tintColor="blue" />);
 
-    expect(wrapper).toMatchSnapshot();
-  });
+        expect(wrapper).toMatchSnapshot();
+    });
 });
